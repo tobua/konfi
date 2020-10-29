@@ -1,0 +1,25 @@
+{
+  "name": "konfi",
+  "scripts": {
+    "build": "padua build",
+    "start": "padua watch"
+  },
+  "main": "dist/index.js",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": "github:tobua/konfi",
+  "source": "index.js",
+  "files": [
+    "dist"
+  ],
+  "prettier": "padua/configuration/.prettierrc.json",
+  "eslintConfig": {
+    "extends": "./node_modules/padua/configuration/eslint.cjs"
+  },
+  "engines": {
+    "node": ">= 13.2.0"
+  },
+  "devDependencies": {
+    "padua": "^0.1.4"
+  }
+}
