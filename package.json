@@ -1,25 +1,48 @@
 {
   "name": "konfi",
+  "version": "0.1.0",
+  "repository": "github:tobua/konfi",
+  "license": "MIT",
+  "author": "Matthias Giger",
   "scripts": {
     "build": "padua build",
-    "start": "padua watch"
+    "start": "padua watch",
+    "test": "padua test"
+  },
+  "peerDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "main": "dist/index.js",
-  "version": "0.1.0",
-  "license": "MIT",
-  "repository": "github:tobua/konfi",
   "source": "index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index.ts",
+    "render.tsx"
   ],
+  "devDependencies": {
+    "@types/react": "^16.9.55",
+    "padua": "^0.1.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-test-renderer": "^17.0.1"
+  },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {
     "extends": "./node_modules/padua/configuration/eslint.cjs"
   },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "./node_modules/padua/configuration/tsconfig.json"
+      }
+    },
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  },
   "engines": {
     "node": ">= 13.2.0"
-  },
-  "devDependencies": {
-    "padua": "^0.1.4"
   }
 }
