@@ -29,8 +29,29 @@ test('Generates proper layout.', () => {
     },
   }
 
-  const markup = create(<Konfi schema={schema} data={data} />).toJSON()
-  const expected = create(<div className="konfi">hello</div>).toJSON()
+  const onChangeMock = jest.fn()
+  const Component = (
+    <Konfi data={data} schema={schema} onChange={onChangeMock} />
+  )
 
-  expect(markup).toEqual(expected)
+  const markup = create(Component)
+  const instance = markup.root
+  const flat = markup.toJSON()
+
+  expect(flat).toBeDefined()
+  expect(flat.type).toEqual('div')
+  expect(flat.props.className).toEqual('konfi')
+
+  expect(onChangeMock.mock.calls.length).toBe(0)
+
+  // Input for someValue is available.
+  const inputSomeValue = flat.children[1].children[0].children[0].children[3]
+
+  expect(inputSomeValue.type).toEqual('input')
+  expect(inputSomeValue.props.value).toEqual(5)
+  expect(inputSomeValue.props.type).toEqual('number')
+
+  const firstInputInstance = instance.findAllByType('input')[0]
+
+  expect(firstInputInstance.type).toEqual('input')
 })
