@@ -3,6 +3,7 @@ export enum Type {
   string,
   boolean,
   hex,
+  filePath,
 }
 
 type Value = {

@@ -4,7 +4,47 @@
 
 # konfi
 
-Standard for Configuration Management and WYSIWYG Editor.
+UI for Configuration Management.
 
-- show schema in html and values are inputtable
-- use to preview naven config directly
+## Installation & Usage
+
+```
+npm i konfi
+```
+
+```jsx
+import React from 'react'
+import { render } from 'react-dom'
+import { Konfi, Type } from 'konfi'
+
+const data = {
+  someValue: 5,
+  anotherValue: 'red',
+}
+
+// The schema is optional and in most cases can be inferred from the data.
+const schema = {
+  someValue: {
+    type: Type.number,
+  },
+  anotherValue: {
+    type: Type.string,
+  },
+}
+
+const onChange = (data: any) => console.log('new configuration', data)
+
+render(
+  <div>
+    <Konfi schema={schema} data={data} onChange={onChange} />
+  </div>,
+  document.body
+)
+```
+
+## Upcoming Features
+
+- Colorpicker
+- Regex Validation
+- Validation
+- generate new data with immer patches

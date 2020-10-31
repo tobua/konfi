@@ -32,7 +32,7 @@ const onChange = (data: any) => console.log('onChange', data)
 
 render(
   <div>
-    <Konfi schema={schema} data={data} onChange={onChange} />
+    <Konfi data={data} schema={schema} onChange={onChange} />
   </div>,
   document.body
 )
