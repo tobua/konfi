@@ -1,7 +1,7 @@
 import React from 'react'
 import '@testing-library/jest-dom'
 import { render, fireEvent } from '@testing-library/react'
-import { Konfi, Type } from '../dist'
+import { Konfi, Type } from '..'
 
 test('Renders input and updates data on input change.', async () => {
   const data = {
@@ -47,7 +47,7 @@ test('Renders input and updates data on input change.', async () => {
 
   expect(rendered.queryByText('someValue')).toBeDefined()
 
-  let firstInput = (await getAllByTag('input'))[0] as HTMLInputElement
+  const firstInput = (await getAllByTag('input'))[0] as HTMLInputElement
 
   expect(firstInput.tagName.toLowerCase()).toEqual('input')
   expect(firstInput.value).toEqual('5')
@@ -60,6 +60,5 @@ test('Renders input and updates data on input change.', async () => {
   expect(onChangeMock.mock.calls[0][0].someValue).toBe(6)
 
   // Data was updated in DOM input.
-  firstInput = (await getAllByTag('input'))[0] as HTMLInputElement
   expect(firstInput.value).toEqual('6')
 })

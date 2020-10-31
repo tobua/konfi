@@ -1,12 +1,12 @@
 import { markup } from './markup'
+import { infer } from './infer'
 import { Schema } from './types'
 
 export { Type } from './types'
 
-// <Konfi schema={schema} data={data} />
 export const Konfi = ({
   data,
-  schema,
+  schema = infer(data),
   onChange,
 }: {
   data: any
