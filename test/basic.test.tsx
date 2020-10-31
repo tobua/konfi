@@ -1,8 +1,9 @@
 import React from 'react'
-import { create } from 'react-test-renderer'
-import { Konfi, Type } from '..'
+import '@testing-library/jest-dom'
+import { render, fireEvent } from '@testing-library/react'
+import { Konfi, Type } from '../dist'
 
-test('Generates proper layout.', () => {
+test('Renders input and updates data on input change.', async () => {
   const data = {
     someValue: 5,
     nested: {
@@ -34,24 +35,31 @@ test('Generates proper layout.', () => {
     <Konfi data={data} schema={schema} onChange={onChangeMock} />
   )
 
-  const markup = create(Component)
-  const instance = markup.root
-  const flat = markup.toJSON()
-
-  expect(flat).toBeDefined()
-  expect(flat.type).toEqual('div')
-  expect(flat.props.className).toEqual('konfi')
+  const rendered = render(Component)
 
   expect(onChangeMock.mock.calls.length).toBe(0)
 
-  // Input for someValue is available.
-  const inputSomeValue = flat.children[1].children[0].children[0].children[3]
+  const getAllByTag = (tag: string) => {
+    return rendered.findAllByText((content, element) => {
+      return element.tagName.toLowerCase() === tag
+    })
+  }
 
-  expect(inputSomeValue.type).toEqual('input')
-  expect(inputSomeValue.props.value).toEqual(5)
-  expect(inputSomeValue.props.type).toEqual('number')
+  expect(rendered.queryByText('someValue')).toBeDefined()
 
-  const firstInputInstance = instance.findAllByType('input')[0]
+  let firstInput = (await getAllByTag('input'))[0] as HTMLInputElement
 
-  expect(firstInputInstance.type).toEqual('input')
+  expect(firstInput.tagName.toLowerCase()).toEqual('input')
+  expect(firstInput.value).toEqual('5')
+
+  fireEvent.change(firstInput, { target: { value: 6 } })
+
+  expect(onChangeMock.mock.calls.length).toBe(1)
+
+  // Data was updated in onChange callback.
+  expect(onChangeMock.mock.calls[0][0].someValue).toBe(6)
+
+  // Data was updated in DOM input.
+  firstInput = (await getAllByTag('input'))[0] as HTMLInputElement
+  expect(firstInput.value).toEqual('6')
 })
