@@ -1,7 +1,15 @@
 import React, { useState } from 'react'
-import { Schema, Type } from './index'
+import { Schema, Type } from './types'
 
-export const Input = ({ schema, value }: { schema: Schema; value: any }) => {
+export const Input = ({
+  schema,
+  value,
+  onChange,
+}: {
+  schema: Schema
+  value: any
+  onChange: (value: any) => void
+}) => {
   const [currentValue, setValue] = useState(value)
   let type = 'string'
 
@@ -16,7 +24,16 @@ export const Input = ({ schema, value }: { schema: Schema; value: any }) => {
   return (
     <input
       value={currentValue}
-      onChange={(event) => setValue(event.target.value)}
+      onChange={(event) => {
+        let value: any = event.target.value
+
+        if (schema.type === Type.number) {
+          value = Number(value)
+        }
+
+        setValue(value)
+        onChange(value)
+      }}
       type={type}
     />
   )

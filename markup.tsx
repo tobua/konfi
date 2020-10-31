@@ -1,5 +1,5 @@
 import React from 'react'
-import { Schema, Type } from './index'
+import { Type, Schema } from './types'
 import { Input } from './Input'
 
 const isNested = (data: any) =>
@@ -9,10 +9,14 @@ const isNested = (data: any) =>
 const Level = ({
   data,
   schema,
+  onChange,
+  path = [],
   indentation = 1,
 }: {
   data: any
   schema: Schema
+  onChange: (path: string[], value: any) => void
+  path?: string[]
   indentation?: number
 }) => {
   // Recursion ending condition.
@@ -36,7 +40,11 @@ const Level = ({
               {nested ? (
                 <>
                   {hasSchema ? (
-                    <Input schema={currentSchema} value={current} />
+                    <Input
+                      schema={currentSchema}
+                      value={current}
+                      onChange={(value: any) => onChange([...path, key], value)}
+                    />
                   ) : (
                     data[key]
                   )}
@@ -48,6 +56,8 @@ const Level = ({
             <Level
               data={data[key]}
               schema={schema[key]}
+              onChange={onChange}
+              path={[...path, key]}
               indentation={indentation + 1}
             />
             <p>{nested ? '' : '}'}</p>
@@ -58,11 +68,15 @@ const Level = ({
   )
 }
 
-export const markup = (schema: Schema, data: any) => {
+export const markup = (
+  data: any,
+  onChange: (path: string[], value: any) => void,
+  schema: Schema
+) => {
   return (
     <div className="konfi" style={{ fontFamily: 'monospace' }}>
       <p>{'{'}</p>
-      <Level data={data} schema={schema} />
+      <Level data={data} schema={schema} onChange={onChange} />
       <p>{'}'}</p>
     </div>
   )
