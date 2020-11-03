@@ -1,0 +1,24 @@
+name: publish-demo
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout
+      - name: Build 🛠️
+        run: |
+          npm install
+          cd demo
+          npm install
+          npx papua build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: demo
+          FOLDER: demo/dist
+          CLEAN: true
