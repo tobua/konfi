@@ -24,17 +24,20 @@ const Level = ({
     return null
   }
 
+  const keys = Object.keys(data)
+
   return (
     <div style={{ marginLeft: 20 }}>
-      {Object.keys(data).map((key) => {
+      {keys.map((key, index) => {
         const current = data[key]
         const nested = isNested(current)
         const currentSchema = schema[key]
+        const isLast = index === keys.length - 1
         const hasSchema =
           typeof currentSchema.type === 'number' && currentSchema.type in Type
 
         return (
-          <div key={key}>
+          <div key={`${key}_${index}`}>
             <p>
               {key}:{' '}
               {nested ? (
@@ -60,7 +63,7 @@ const Level = ({
               path={[...path, key]}
               indentation={indentation + 1}
             />
-            <p>{nested ? '' : '}'}</p>
+            <p>{nested ? '' : `}${!isLast ? ',' : ''}`}</p>
           </div>
         )
       })}

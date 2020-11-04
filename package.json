@@ -19,7 +19,10 @@
   "files": [
     "dist",
     "index.ts",
-    "render.tsx"
+    "infer.ts",
+    "Input.tsx",
+    "markup.tsx",
+    "types.ts"
   ],
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.5",
