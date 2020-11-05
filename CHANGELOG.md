@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/tobua/konfi/compare/v0.1.1...v0.1.2) (2020-11-05)
+
+
+### Features
+
+* **input:** input styling and validation ([d488714](https://github.com/tobua/konfi/commit/d4887143a6ef4df0ce340f7efd6dba72d4d3d966))
+
 ### [0.1.1](https://github.com/tobua/konfi/compare/v0.1.0...v0.1.1) (2020-11-04)
 
 
