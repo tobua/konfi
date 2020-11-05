@@ -47,7 +47,7 @@ export const Input = ({
           onChange(changedValue)
         }}
       >
-        {schema.values.map((selectValue) => (
+        {(schema.values as string[]).map((selectValue) => (
           <option key={selectValue} value={selectValue}>
             {selectValue}
           </option>
