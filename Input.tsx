@@ -1,6 +1,17 @@
 import React, { useState } from 'react'
 import { Schema, Type } from './types'
 
+const inputStyles = ({ hasError }: { hasError: boolean }) => ({
+  borderRadius: 5,
+  paddingTop: 2,
+  paddingRight: 2,
+  paddingBottom: 2,
+  paddingLeft: 5,
+  borderWidth: 1,
+  borderColor: hasError ? 'red' : 'black',
+  color: hasError ? 'red' : 'black',
+})
+
 export const Input = ({
   schema,
   value,
@@ -12,6 +23,7 @@ export const Input = ({
 }) => {
   const [currentValue, setValue] = useState(value)
   let type = 'string'
+  let hasError = false
 
   if (schema.type === Type.number) {
     type = 'number'
@@ -21,18 +33,30 @@ export const Input = ({
     type = 'checkbox'
   }
 
+  if (schema.valid && typeof schema.valid === 'function') {
+    hasError = !schema.valid(currentValue)
+  }
+
   return (
     <input
+      style={inputStyles({ hasError })}
       value={currentValue}
       onChange={(event) => {
-        let value: any = event.target.value
+        let changedValue: any = event.target.value
 
         if (schema.type === Type.number) {
-          value = Number(value)
+          changedValue = Number(changedValue)
         }
 
-        setValue(value)
-        onChange(value)
+        setValue(changedValue)
+        // Only update if value is valid.
+        if (
+          !schema.valid ||
+          typeof schema.valid !== 'function' ||
+          schema.valid(changedValue)
+        ) {
+          onChange(changedValue)
+        }
       }}
       type={type}
     />

@@ -4,6 +4,7 @@ import { Konfi, Type } from 'konfi'
 
 const data = {
   someValue: 5,
+  age: 16,
   nested: {
     anotherValue: 'test',
     deeplyNested: {
@@ -15,6 +16,11 @@ const data = {
 const schema = {
   someValue: {
     type: Type.number,
+  },
+  age: {
+    type: Type.number,
+    // Adults only.
+    valid: (value: number) => value >= 18,
   },
   nested: {
     anotherValue: {
