@@ -5,6 +5,8 @@ import { Konfi, Type } from 'konfi'
 const data = {
   someValue: 5,
   age: 16,
+  select: 'first',
+  toggle: false,
   nested: {
     anotherValue: 'test',
     deeplyNested: {
@@ -21,6 +23,13 @@ const schema = {
     type: Type.number,
     // Adults only.
     valid: (value: number) => value >= 18,
+  },
+  select: {
+    type: Type.select,
+    values: ['first', 'second', 'third'],
+  },
+  toggle: {
+    type: Type.boolean,
   },
   nested: {
     anotherValue: {

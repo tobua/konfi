@@ -4,6 +4,7 @@ export enum Type {
   boolean,
   hex,
   filePath,
+  select,
 }
 
 type Value = {

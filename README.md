@@ -46,13 +46,24 @@ render(
 
 The following properties can be used to describe the values in further detail:
 
-`type: Type.number | Type.string | Type.boolean | Type.hex | Type.filePath`
+`type: Type.number | Type.string | Type.boolean | Type.hex | Type.filePath | Type.select`
 
 Various types to describe what input to show and which standard validations to apply.
 
 `valid: (value: any) => boolean`
 
 A function indicating whether the current value is valid, otherwise the input will be shown in erroneous state and the change will not be propagated.
+
+## Types
+
+### select
+
+```js
+{
+  type: Type.select,
+  values: ['first', 'second', 'third']
+}
+```
 
 ## Upcoming Features
 

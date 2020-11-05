@@ -37,6 +37,40 @@ export const Input = ({
     hasError = !schema.valid(currentValue)
   }
 
+  if (schema.type === Type.select) {
+    return (
+      <select
+        onChange={(event) => {
+          const changedValue = event.target.value
+
+          setValue(changedValue)
+          onChange(changedValue)
+        }}
+      >
+        {schema.values.map((selectValue) => (
+          <option key={selectValue} value={selectValue}>
+            {selectValue}
+          </option>
+        ))}
+      </select>
+    )
+  }
+
+  if (schema.type === Type.boolean) {
+    return (
+      <input
+        checked={currentValue}
+        type="checkbox"
+        onChange={(event) => {
+          const changedValue = event.target.checked
+
+          setValue(changedValue)
+          onChange(changedValue)
+        }}
+      />
+    )
+  }
+
   return (
     <input
       style={inputStyles({ hasError })}
