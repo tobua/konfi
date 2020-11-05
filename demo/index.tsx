@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { render } from 'react-dom'
 import { Konfi, Type } from 'konfi'
 
@@ -43,11 +43,34 @@ const schema = {
   },
 }
 
-const onChange = (data: any) => console.log('onChange', data)
+let updateComponentData
+
+const Result = () => {
+  const [data, setData] = useState(null)
+
+  updateComponentData = setData
+
+  console.log('onChange', data)
+
+  if (!data) {
+    return <div>Initial</div>
+  }
+
+  return (
+    <div>
+      <p>{data.age}</p>
+      <p>{data.select}</p>
+    </div>
+  )
+}
+
+const onChange = (data: any) => updateComponentData(data)
 
 render(
-  <div>
+  <div style={{ fontFamily: 'sans-serif' }}>
+    <h1>konfi Demo</h1>
     <Konfi data={data} schema={schema} onChange={onChange} />
+    <Result />
   </div>,
   document.body
 )
