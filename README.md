@@ -65,6 +65,16 @@ A function indicating whether the current value is valid, otherwise the input wi
 }
 ```
 
+### color
+
+```js
+{
+  type: Type.hex
+}
+```
+
+This will display the color with a color picker overlay to choose another HEX color.
+
 ## Upcoming Features
 
 - Colorpicker

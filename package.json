@@ -9,6 +9,9 @@
     "start": "padua watch",
     "test": "padua test"
   },
+  "dependencies": {
+    "@react-hook/hover": "^4.0.0",
+  },
   "peerDependencies": {
     "react": "^17.0.1",
     "react-dom": "^17.0.1"

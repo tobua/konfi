@@ -1,6 +1,6 @@
 import React from 'react'
 import { Type, Schema } from './types'
-import { Input } from './Input'
+import { Input } from './input/Input'
 
 const isNested = (data: any) =>
   !data || typeof data !== 'object' || Array.isArray(data)
@@ -38,7 +38,7 @@ const Level = ({
 
         return (
           <div key={`${key}_${index}`}>
-            <p>
+            <div>
               {key}:{' '}
               {nested ? (
                 <>
@@ -55,7 +55,7 @@ const Level = ({
               ) : (
                 '{'
               )}
-            </p>
+            </div>
             <Level
               data={data[key]}
               schema={schema[key]}

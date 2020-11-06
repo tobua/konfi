@@ -7,6 +7,7 @@ const data = {
   age: 16,
   select: 'first',
   toggle: false,
+  background: '#FF00FF',
   nested: {
     anotherValue: 'test',
     deeplyNested: {
@@ -30,6 +31,9 @@ const schema = {
   },
   toggle: {
     type: Type.boolean,
+  },
+  background: {
+    type: Type.hex,
   },
   nested: {
     anotherValue: {
@@ -57,7 +61,7 @@ const Result = () => {
   }
 
   return (
-    <div>
+    <div style={{ backgroundColor: data.background }}>
       <p>{data.age}</p>
       <p>{data.select}</p>
     </div>

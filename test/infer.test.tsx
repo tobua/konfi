@@ -39,3 +39,47 @@ test('Correctly infers schema for basic data.', () => {
     actualSchema.nested.deeplyNested.oneMoreValue.type
   )
 })
+
+test('Recognizes different color schemes.', () => {
+  const data = {
+    shortHex: '#F0F',
+    longHex: '#FF00FF',
+    noHex: 'FF00FF',
+    wrongHex: '#FF00FF0',
+    alsoWrongHex: '#F',
+    betweenWrongHex: '#ABF0',
+    nonHexCharacter: '#FAAZZE',
+  }
+
+  const actualSchema = {
+    shortHex: {
+      type: Type.hex,
+    },
+    longHex: {
+      type: Type.hex,
+    },
+    noHex: {
+      type: Type.string,
+    },
+    wrongHex: {
+      type: Type.string,
+    },
+    alsoWrongHex: {
+      type: Type.string,
+    },
+    nonHexCharacter: {
+      type: Type.string,
+    },
+  }
+
+  const schema = infer(data) as any
+
+  expect(schema).toBeDefined()
+
+  expect(schema.shortHex.type).toEqual(actualSchema.shortHex.type)
+  expect(schema.longHex.type).toEqual(actualSchema.longHex.type)
+  expect(schema.noHex.type).toEqual(actualSchema.noHex.type)
+  expect(schema.wrongHex.type).toEqual(actualSchema.wrongHex.type)
+  expect(schema.alsoWrongHex.type).toEqual(actualSchema.alsoWrongHex.type)
+  expect(schema.nonHexCharacter.type).toEqual(actualSchema.nonHexCharacter.type)
+})

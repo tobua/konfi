@@ -1,16 +1,7 @@
 import React, { useState } from 'react'
-import { Schema, Type } from './types'
-
-const inputStyles = ({ hasError }: { hasError: boolean }) => ({
-  borderRadius: 5,
-  paddingTop: 2,
-  paddingRight: 2,
-  paddingBottom: 2,
-  paddingLeft: 5,
-  borderWidth: 1,
-  borderColor: hasError ? 'red' : 'black',
-  color: hasError ? 'red' : 'black',
-})
+import { Schema, Type } from '../types'
+import { Picker } from './Picker'
+import * as styles from './styles'
 
 export const Input = ({
   schema,
@@ -71,9 +62,21 @@ export const Input = ({
     )
   }
 
+  if (schema.type === Type.hex) {
+    return (
+      <Picker
+        value={currentValue}
+        onChange={(changedValue) => {
+          setValue(changedValue)
+          onChange(changedValue)
+        }}
+      />
+    )
+  }
+
   return (
     <input
-      style={inputStyles({ hasError })}
+      style={styles.input({ hasError })}
       value={currentValue}
       onChange={(event) => {
         let changedValue: any = event.target.value

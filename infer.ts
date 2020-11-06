@@ -6,7 +6,9 @@ const inferTypeFromValue = (value: any) => {
   }
 
   if (typeof value === 'string') {
-    // Regex match for hex
+    if (value.match(/^#[0-9a-fA-F]{3,6}$/g)) {
+      return Type.hex
+    }
     return Type.string
   }
 }
