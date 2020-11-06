@@ -57,7 +57,7 @@ const Result = () => {
   console.log('onChange', data)
 
   if (!data) {
-    return <div>Initial</div>
+    return <div>Adapt configuration above to see changes.</div>
   }
 
   return (

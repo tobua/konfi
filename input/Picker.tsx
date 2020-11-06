@@ -35,6 +35,16 @@ const rgbSlider = [
   [255, 0, 0], // Red
 ]
 
+const rgbSliderHex = [
+  '#FF0000',
+  '#FFFF00',
+  '#00FF00',
+  '#00FFFF',
+  '#0000FF',
+  '#FF00FF',
+  '#FF0000',
+]
+
 const indexToChange = (slideIndex: number) => {
   const modulo = slideIndex % 3
 
@@ -76,30 +86,83 @@ const sliderValueToRGB = (value: number) => {
   return `#${toHex(slide[0])}${toHex(slide[1])}${toHex(slide[2])}`
 }
 
-export const Picker = ({ value, onChange }) => {
+interface Props {
+  value: string
+  onChange: (color: string) => void
+}
+
+export const Picker = ({ value, onChange }: Props) => {
+  const [currentColor, setCurrentColor] = useState(value)
   const target = useRef(null)
   const hovering = useHover(target)
-  const [slider, setSlider] = useState(0)
+  const [sliderValue, setSliderValue] = useState(0)
 
   return (
     <>
       <div ref={target} style={styles.color(value)}>
         <div style={styles.picker.wrapper(hovering)}>
-          <div style={styles.picker.board(sliderValueToRGB(slider))}>
+          <div style={styles.picker.board(currentColor)}>
             <div style={styles.picker.boardOverlay} />
+            <div style={styles.picker.boardHandle(currentColor)} />
           </div>
-          <input
-            type="range"
-            value={slider}
-            min="0"
-            max="1530"
-            onChange={(event) => setSlider(Number(event.target.value))}
+          <style
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{
+              __html: `
+            .range::-webkit-slider-thumb {
+              border: 2px solid #FFFFFF;
+              box-shadow: 1px 1px 3px gray;
+              height: 16px;
+              width: 16px;
+              border-radius: 32px;
+              background: ${sliderValueToRGB(sliderValue)};
+              cursor: pointer;
+              -webkit-appearance: none;
+            }
+
+            .range::-moz-range-thumb {
+              /* TODO */
+            }
+
+            .range::-ms-thumb {
+              /* TODO */
+            }
+          `,
+            }}
           />
+
+          <div style={styles.picker.rangeWrapper}>
+            <div style={styles.picker.rangeBackgroundWrapper}>
+              {rgbSliderHex.slice(0, -1).map((current, index) => (
+                <div
+                  key={index}
+                  style={styles.picker.rangeBackground(
+                    current,
+                    rgbSliderHex[index + 1]
+                  )}
+                />
+              ))}
+            </div>
+            <input
+              className="range"
+              style={styles.picker.rangeInput}
+              type="range"
+              value={sliderValue}
+              min="0"
+              max="1530"
+              onChange={(event) => {
+                const targetValue = Number(event.target.value)
+
+                setSliderValue(targetValue)
+                setCurrentColor(sliderValueToRGB(targetValue))
+              }}
+            />
+          </div>
           <input
             style={styles.input({ hasError: false })}
             type="string"
-            value={value}
-            onChange={(event) => onChange(event.target.value)}
+            value={currentColor}
+            onChange={(event) => setCurrentColor(event.target.value)}
           />
           <div style={styles.picker.popularWrapper}>
             {popularColors.map((color) => (
@@ -108,7 +171,7 @@ export const Picker = ({ value, onChange }) => {
                 type="button"
                 aria-label={`Select ${color} color`}
                 style={styles.picker.popular(color)}
-                onClick={() => onChange(color)}
+                onClick={() => setCurrentColor(color)}
               />
             ))}
           </div>
