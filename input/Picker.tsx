@@ -21,7 +21,7 @@ export const Picker = ({ value, onChange }) => {
       <div ref={target} style={styles.color(value)}>
         <div style={styles.picker.wrapper(hovering)}>
           <div style={styles.picker.board} />
-          <p>slider</p>
+          <input type="range" />
           <input
             style={styles.input({ hasError: false })}
             type="string"
