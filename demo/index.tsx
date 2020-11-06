@@ -7,7 +7,7 @@ const data = {
   age: 16,
   select: 'first',
   toggle: false,
-  background: '#FF00FF',
+  background: '#BADA55',
   nested: {
     anotherValue: 'test',
     deeplyNested: {

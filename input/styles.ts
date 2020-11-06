@@ -35,10 +35,33 @@ export const picker = {
     borderStyle: 'solid',
     borderColor: 'black',
   }),
-  board: {
+  board: (selectedColor: string) => ({
     display: 'flex',
+    position: 'relative' as 'relative',
     height: 100,
-    backgroundColor: 'black',
-    backgroundImage: 'linear-gradient(to right, #ffffff 0%, transparent 100%)',
+    backgroundColor: selectedColor,
+    backgroundImage: `linear-gradient(to right, #FFFFFF 0%, transparent 100%)`,
+  }),
+  boardOverlay: {
+    position: 'absolute' as 'absolute',
+    backgroundImage: `linear-gradient(to top, #000000 0%, transparent 100%)`,
+    width: '100%',
+    height: '100%',
   },
+  popularWrapper: {
+    display: 'flex',
+    flexDirection: 'row' as 'row',
+    flexWrap: 'wrap' as 'wrap',
+    marginTop: 10,
+  },
+  popular: (background: string) => ({
+    position: 'relative' as 'relative',
+    width: '10%',
+    height: 0,
+    paddingBottom: '10%',
+    backgroundColor: background,
+    border: 'none',
+    outline: 'none',
+    cursor: 'pointer',
+  }),
 }
