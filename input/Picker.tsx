@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react'
 import useHover from '@react-hook/hover'
+import useMouse from '@react-hook/mouse-position'
 import * as styles from './styles'
 
 const popularColors = [
   '#000000', // Black
   '#FFFFFF', // White
   '#9E9E9E', // Gray
+  '#795548', // Brown
   '#F44336', // Red
   '#E91E63', // Pink
   '#9C27B0', // Purple
@@ -22,7 +24,6 @@ const popularColors = [
   '#FFC107', // Amber
   '#FF9800', // Orange
   '#FF5722', // Deep Orange
-  '#795548', // Brown
 ]
 
 const rgbSlider = [
@@ -86,6 +87,50 @@ const sliderValueToRGB = (value: number) => {
   return `#${toHex(slide[0])}${toHex(slide[1])}${toHex(slide[2])}`
 }
 
+const Board = ({ color }: { color: string }) => {
+  const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 })
+  const target = useRef<HTMLDivElement>(null)
+  const mouse = useMouse(target)
+  const [mouseDown, setMouseDown] = useState(false)
+
+  const width = target.current?.offsetWidth
+  const height = target.current?.offsetHeight
+
+  let handleX = lastPosition.x
+  let handleY = lastPosition.y
+
+  if (mouseDown) {
+    handleX = mouse.x
+    handleY = mouse.y
+
+    // User leaves window while mouse is pressed down.
+    if (handleX > width || handleY > height || handleX < 0 || handleY < 0) {
+      setLastPosition({ x: mouse.x, y: mouse.y })
+      setMouseDown(false)
+      return null
+    }
+  }
+
+  return (
+    <>
+      <div
+        ref={target}
+        role="button"
+        tabIndex={0}
+        onMouseDown={() => setMouseDown(true)}
+        onMouseUp={() => {
+          setLastPosition({ x: mouse.x, y: mouse.y })
+          setMouseDown(false)
+        }}
+        style={styles.picker.board(color)}
+      >
+        <div style={styles.picker.boardOverlay} />
+        <div style={styles.picker.boardHandle(color, handleX, handleY)} />
+      </div>
+    </>
+  )
+}
+
 interface Props {
   value: string
   onChange: (color: string) => void
@@ -100,15 +145,13 @@ export const Picker = ({ value, onChange }: Props) => {
   return (
     <>
       <div ref={target} style={styles.color(value)}>
-        <div style={styles.picker.wrapper(hovering)}>
-          <div style={styles.picker.board(currentColor)}>
-            <div style={styles.picker.boardOverlay} />
-            <div style={styles.picker.boardHandle(currentColor)} />
-          </div>
+        <div style={styles.picker.wrapper(true)}>
+          <Board color={currentColor} />
           <style
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: `
+            /* combining below selectors will not work. */
             .range::-webkit-slider-thumb {
               border: 2px solid #FFFFFF;
               box-shadow: 1px 1px 3px gray;

@@ -40,7 +40,8 @@ export const picker = {
     position: 'relative' as 'relative',
     height: 100,
     backgroundColor: selectedColor,
-    backgroundImage: `linear-gradient(to right, #FFFFFF 0%, transparent 100%)`,
+    backgroundImage: `linear-gradient(to right, transparent 0%, #FFFFFF 100%)`,
+    outline: 'none',
   }),
   boardOverlay: {
     position: 'absolute' as 'absolute',
@@ -48,13 +49,15 @@ export const picker = {
     width: '100%',
     height: '100%',
   },
-  boardHandle: (background: string) => ({
+  boardHandle: (background: string, x: number, y: number) => ({
     position: 'absolute' as 'absolute',
-    top: 0,
-    left: 0,
+    cursor: 'pointer',
+    top: y - 5,
+    left: x - 5,
     width: 7,
     height: 7,
     border: '2px solid white',
+    boxShadow: '1px 1px 3px gray',
     borderRadius: 14,
     background,
   }),
