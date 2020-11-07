@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@react-hook/hover": "^4.0.0",
-    "@react-hook/mouse-position": "^4.1.0"
+    "@react-hook/mouse-position": "^4.1.0",
+    "hex-rgb": "^4.2.0",
+    "rgb-hex": "^3.0.0"
   },
   "peerDependencies": {
     "react": "^17.0.1",

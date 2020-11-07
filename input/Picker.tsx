@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import useHover from '@react-hook/hover'
 import useMouse from '@react-hook/mouse-position'
+import hexToRgb from 'hex-rgb'
+import rgbHex from 'rgb-hex'
 import * as styles from './styles'
 
 const popularColors = [
@@ -87,6 +89,58 @@ const sliderValueToRGB = (value: number) => {
   return `#${toHex(slide[0])}${toHex(slide[1])}${toHex(slide[2])}`
 }
 
+const whitenByPercentage = (
+  red: number,
+  green: number,
+  blue: number,
+  percentage: number
+) => ({
+  red: red + (255 - red) * percentage,
+  green: green + (255 - green) * percentage,
+  blue: blue + (255 - blue) * percentage,
+})
+
+const blackenByPercentage = (
+  red: number,
+  green: number,
+  blue: number,
+  percentage: number
+) => ({
+  red: red - red * percentage,
+  green: green - green * percentage,
+  blue: blue - blue * percentage,
+})
+
+const calculateHandleColor = (
+  color: string,
+  handleX: number,
+  handleY: number,
+  width: number,
+  height: number
+) => {
+  let rgbColor: { red: number; green: number; blue: number } = hexToRgb(color)
+  // Fully to the right will add 100% white.
+  const whitePercentage = handleX / width
+  // Fully at the bottom will add (or remove) 100% black.
+  const blackPercentage = handleY / height
+
+  rgbColor = whitenByPercentage(
+    rgbColor.red,
+    rgbColor.green,
+    rgbColor.blue,
+    whitePercentage
+  )
+
+  rgbColor = blackenByPercentage(
+    rgbColor.red,
+    rgbColor.green,
+    rgbColor.blue,
+    blackPercentage
+  )
+
+  return `#${rgbHex(rgbColor.red, rgbColor.green, rgbColor.blue)}`
+}
+
 const Board = ({ color }: { color: string }) => {
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 })
   const target = useRef<HTMLDivElement>(null)
@@ -111,6 +165,14 @@ const Board = ({ color }: { color: string }) => {
     }
   }
 
+  const handleColor = calculateHandleColor(
+    color,
+    handleX,
+    handleY,
+    width,
+    height
+  )
+
   return (
     <>
       <div
@@ -125,7 +187,7 @@ const Board = ({ color }: { color: string }) => {
         style={styles.picker.board(color)}
       >
         <div style={styles.picker.boardOverlay} />
-        <div style={styles.picker.boardHandle(color, handleX, handleY)} />
+        <div style={styles.picker.boardHandle(handleColor, handleX, handleY)} />
       </div>
     </>
   )
