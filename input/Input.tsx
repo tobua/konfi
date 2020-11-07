@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Schema, Type } from '../types'
-import { Picker } from './Picker'
+import { Color } from './Color'
 import * as styles from './styles'
 
 export const Input = ({
@@ -64,7 +64,7 @@ export const Input = ({
 
   if (schema.type === Type.hex) {
     return (
-      <Picker
+      <Color
         value={currentValue}
         onChange={(changedValue) => {
           setValue(changedValue)

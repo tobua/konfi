@@ -1,9 +1,83 @@
 import React, { useRef, useState } from 'react'
-import useHover from '@react-hook/hover'
 import useMouse from '@react-hook/mouse-position'
 import hexToRgb from 'hex-rgb'
 import rgbHex from 'rgb-hex'
 import * as styles from './styles'
+
+const board = (selectedColor: string) => ({
+  display: 'flex',
+  position: 'relative' as 'relative',
+  height: 100,
+  backgroundColor: selectedColor,
+  backgroundImage: `linear-gradient(to right, transparent 0%, #FFFFFF 100%)`,
+  outline: 'none',
+})
+
+const boardOverlay = {
+  position: 'absolute' as 'absolute',
+  backgroundImage: `linear-gradient(to top, #000000 0%, transparent 100%)`,
+  width: '100%',
+  height: '100%',
+}
+
+const boardHandle = (background: string, x: number, y: number) => ({
+  position: 'absolute' as 'absolute',
+  cursor: 'pointer',
+  top: y - 5,
+  left: x - 5,
+  width: 7,
+  height: 7,
+  border: '2px solid white',
+  boxShadow: '1px 1px 3px gray',
+  borderRadius: 14,
+  background,
+})
+
+const rangeWrapper = {
+  marginTop: 10,
+  marginBottom: 10,
+  position: 'relative' as 'relative',
+  height: 10,
+}
+
+const rangeBackgroundWrapper = {
+  display: 'flex',
+  flexDirection: 'row' as 'row',
+}
+
+const rangeBackground = (from: string, to: string) => ({
+  width: 'calc(100% / 6)',
+  height: 10,
+  backgroundImage: `linear-gradient(to right, ${from} 0%, ${to} 100%)`,
+})
+
+const rangeInput = {
+  position: 'absolute' as 'absolute',
+  width: '100%',
+  top: -5,
+  left: -2,
+  appearance: 'none' as 'none',
+  outline: 'none',
+  background: 'none',
+}
+
+const popularWrapper = {
+  display: 'flex',
+  flexDirection: 'row' as 'row',
+  flexWrap: 'wrap' as 'wrap',
+  marginTop: 10,
+}
+
+const popular = (background: string) => ({
+  position: 'relative' as 'relative',
+  width: '10%',
+  height: 0,
+  paddingBottom: '10%',
+  backgroundColor: background,
+  border: 'none',
+  outline: 'none',
+  cursor: 'pointer',
+})
 
 const popularColors = [
   '#000000', // Black
@@ -141,7 +215,13 @@ const calculateHandleColor = (
   return `#${rgbHex(rgbColor.red, rgbColor.green, rgbColor.blue)}`
 }
 
-const Board = ({ color }: { color: string }) => {
+const Board = ({
+  color,
+  setColor,
+}: {
+  color: string
+  setColor: (color: string) => void
+}) => {
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 })
   const target = useRef<HTMLDivElement>(null)
   const mouse = useMouse(target)
@@ -159,8 +239,10 @@ const Board = ({ color }: { color: string }) => {
 
     // User leaves window while mouse is pressed down.
     if (handleX > width || handleY > height || handleX < 0 || handleY < 0) {
+      console.log('outside')
       setLastPosition({ x: mouse.x, y: mouse.y })
       setMouseDown(false)
+      // setColor(calculateHandleColor(color, handleX, handleY, width, height))
       return null
     }
   }
@@ -181,13 +263,15 @@ const Board = ({ color }: { color: string }) => {
         tabIndex={0}
         onMouseDown={() => setMouseDown(true)}
         onMouseUp={() => {
+          console.log('mouse up')
           setLastPosition({ x: mouse.x, y: mouse.y })
           setMouseDown(false)
+          setColor(handleColor)
         }}
-        style={styles.picker.board(color)}
+        style={board(color)}
       >
-        <div style={styles.picker.boardOverlay} />
-        <div style={styles.picker.boardHandle(handleColor, handleX, handleY)} />
+        <div style={boardOverlay} />
+        <div style={boardHandle(handleColor, handleX, handleY)} />
       </div>
     </>
   )
@@ -198,21 +282,17 @@ interface Props {
   onChange: (color: string) => void
 }
 
-export const Picker = ({ value, onChange }: Props) => {
+export const ColorPicker = ({ value, onChange }: Props) => {
   const [currentColor, setCurrentColor] = useState(value)
-  const target = useRef(null)
-  const hovering = useHover(target)
   const [sliderValue, setSliderValue] = useState(0)
 
   return (
     <>
-      <div ref={target} style={styles.color(value)}>
-        <div style={styles.picker.wrapper(true)}>
-          <Board color={currentColor} />
-          <style
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{
-              __html: `
+      <Board color={currentColor} setColor={onChange} />
+      <style
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: `
             /* combining below selectors will not work. */
             .range::-webkit-slider-thumb {
               border: 2px solid #FFFFFF;
@@ -233,54 +313,49 @@ export const Picker = ({ value, onChange }: Props) => {
               /* TODO */
             }
           `,
-            }}
-          />
+        }}
+      />
 
-          <div style={styles.picker.rangeWrapper}>
-            <div style={styles.picker.rangeBackgroundWrapper}>
-              {rgbSliderHex.slice(0, -1).map((current, index) => (
-                <div
-                  key={index}
-                  style={styles.picker.rangeBackground(
-                    current,
-                    rgbSliderHex[index + 1]
-                  )}
-                />
-              ))}
-            </div>
-            <input
-              className="range"
-              style={styles.picker.rangeInput}
-              type="range"
-              value={sliderValue}
-              min="0"
-              max="1530"
-              onChange={(event) => {
-                const targetValue = Number(event.target.value)
-
-                setSliderValue(targetValue)
-                setCurrentColor(sliderValueToRGB(targetValue))
-              }}
+      <div style={rangeWrapper}>
+        <div style={rangeBackgroundWrapper}>
+          {rgbSliderHex.slice(0, -1).map((current, index) => (
+            <div
+              key={index}
+              style={rangeBackground(current, rgbSliderHex[index + 1])}
             />
-          </div>
-          <input
-            style={styles.input({ hasError: false })}
-            type="string"
-            value={currentColor}
-            onChange={(event) => setCurrentColor(event.target.value)}
-          />
-          <div style={styles.picker.popularWrapper}>
-            {popularColors.map((color) => (
-              <button
-                key={color}
-                type="button"
-                aria-label={`Select ${color} color`}
-                style={styles.picker.popular(color)}
-                onClick={() => setCurrentColor(color)}
-              />
-            ))}
-          </div>
+          ))}
         </div>
+        <input
+          className="range"
+          style={rangeInput}
+          type="range"
+          value={sliderValue}
+          min="0"
+          max="1530"
+          onChange={(event) => {
+            const targetValue = Number(event.target.value)
+
+            setSliderValue(targetValue)
+            setCurrentColor(sliderValueToRGB(targetValue))
+          }}
+        />
+      </div>
+      <input
+        style={styles.input({ hasError: false })}
+        type="string"
+        value={currentColor}
+        onChange={(event) => setCurrentColor(event.target.value)}
+      />
+      <div style={popularWrapper}>
+        {popularColors.map((color) => (
+          <button
+            key={color}
+            type="button"
+            aria-label={`Select ${color} color`}
+            style={popular(color)}
+            onClick={() => setCurrentColor(color)}
+          />
+        ))}
       </div>
     </>
   )

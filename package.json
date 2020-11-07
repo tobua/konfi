@@ -10,9 +10,11 @@
     "test": "padua test"
   },
   "dependencies": {
+    "@popperjs/core": "^2.5.4",
     "@react-hook/hover": "^4.0.0",
     "@react-hook/mouse-position": "^4.1.0",
     "hex-rgb": "^4.2.0",
+    "react-popper": "^2.2.4",
     "rgb-hex": "^3.0.0"
   },
   "peerDependencies": {
