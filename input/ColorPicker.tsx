@@ -61,6 +61,39 @@ const rangeInput = {
   background: 'none',
 }
 
+const rangeThumbCrossBrowserStyles = (color: string) => `
+border: 2px solid #FFFFFF;
+box-shadow: 1px 1px 3px gray;
+border-radius: 32px;
+cursor: pointer;
+background: ${color};
+height: 16px;
+width: 16px;
+`
+
+const rangeThumbStyles = (color: string) => `
+.colua__range {
+  -webkit-appearance: none;
+}
+
+/* combining below selectors will not work. */
+.colua__range::-webkit-slider-thumb {
+${rangeThumbCrossBrowserStyles(color)}
+  -webkit-appearance: none; /* Required for Safari */
+  appearance: none;
+}
+
+.colua__range::-moz-range-thumb {
+${rangeThumbCrossBrowserStyles(color)}
+  height: 14px;
+  width: 14px;
+}
+
+.colua__range::-ms-thumb {
+${rangeThumbCrossBrowserStyles(color)}
+}
+`
+
 const popularWrapper = {
   display: 'flex',
   flexDirection: 'row' as 'row',
@@ -291,27 +324,7 @@ export const ColorPicker = ({ value, onChange }: Props) => {
       <style
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
-          __html: `
-            /* combining below selectors will not work. */
-            .range::-webkit-slider-thumb {
-              border: 2px solid #FFFFFF;
-              box-shadow: 1px 1px 3px gray;
-              height: 16px;
-              width: 16px;
-              border-radius: 32px;
-              background: ${sliderValueToRGB(sliderValue)};
-              cursor: pointer;
-              -webkit-appearance: none;
-            }
-
-            .range::-moz-range-thumb {
-              /* TODO */
-            }
-
-            .range::-ms-thumb {
-              /* TODO */
-            }
-          `,
+          __html: rangeThumbStyles(sliderValueToRGB(sliderValue)),
         }}
       />
 
@@ -325,7 +338,7 @@ export const ColorPicker = ({ value, onChange }: Props) => {
           ))}
         </div>
         <input
-          className="range"
+          className="colua__range"
           style={rangeInput}
           type="range"
           value={sliderValue}
@@ -340,7 +353,10 @@ export const ColorPicker = ({ value, onChange }: Props) => {
         />
       </div>
       <input
-        style={styles.input({ hasError: false })}
+        style={{
+          ...styles.input({ hasError: false }),
+          width: 'calc(100% - 10px)',
+        }}
         type="string"
         value={currentColor}
         onChange={(event) => setCurrentColor(event.target.value)}

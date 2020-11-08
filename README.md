@@ -77,6 +77,5 @@ This will display the color with a color picker overlay to choose another HEX co
 
 ## Upcoming Features
 
-- Colorpicker
 - Regex Validation
 - generate new data with immer patches

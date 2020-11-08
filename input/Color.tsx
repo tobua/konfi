@@ -23,6 +23,7 @@ const color = (background: string) => ({
   marginBottom: -8,
   marginRight: 5,
   borderRadius: 5,
+  border: '1px solid black',
 })
 
 const arrow = {
@@ -73,6 +74,8 @@ export const Color = ({ value, onChange }: Props) => {
           ...{
             opacity: hovering || hoveringTooltip ? 1 : 0,
             pointerEvents: hovering || hoveringTooltip ? 'inherit' : 'none',
+            // Otherwise tooltip overlaid by number input switches in safari.
+            zIndex: 1,
           },
         }}
         {...attributes.popper}
