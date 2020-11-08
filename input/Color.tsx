@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePopper } from 'react-popper'
 import useHover from '@react-hook/hover'
 import { ColorPicker } from './ColorPicker'
@@ -46,10 +46,22 @@ export const Color = ({ value, onChange }: Props) => {
   const [popperElement, setPopperElement] = useState(null)
   const hoveringTooltip = useHover(popperElement)
   const [arrowElement, setArrowElement] = useState(null)
+  const [currentValue, setCurrentValue] = useState(value)
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
     placement: 'right',
   })
+
+  // Adapt config when hover leaves and values was set.
+  useEffect(() => {
+    if (
+      currentValue &&
+      !(hovering || hoveringTooltip) &&
+      currentValue !== value
+    ) {
+      onChange(currentValue)
+    }
+  }, [hovering, hoveringTooltip, currentValue, value])
 
   return (
     <>
@@ -66,7 +78,7 @@ export const Color = ({ value, onChange }: Props) => {
         {...attributes.popper}
       >
         <div style={wrapper}>
-          <ColorPicker value={value} onChange={onChange} />
+          <ColorPicker value={currentValue} onChange={setCurrentValue} />
         </div>
         <div ref={setArrowElement} style={styles.arrow}>
           <div style={arrow} />

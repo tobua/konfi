@@ -263,7 +263,6 @@ const Board = ({
         tabIndex={0}
         onMouseDown={() => setMouseDown(true)}
         onMouseUp={() => {
-          console.log('mouse up')
           setLastPosition({ x: mouse.x, y: mouse.y })
           setMouseDown(false)
           setColor(handleColor)
@@ -353,7 +352,10 @@ export const ColorPicker = ({ value, onChange }: Props) => {
             type="button"
             aria-label={`Select ${color} color`}
             style={popular(color)}
-            onClick={() => setCurrentColor(color)}
+            onClick={() => {
+              setCurrentColor(color)
+              onChange(color)
+            }}
           />
         ))}
       </div>

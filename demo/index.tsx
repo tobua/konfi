@@ -3,9 +3,9 @@ import { render } from 'react-dom'
 import { Konfi, Type } from 'konfi'
 
 const data = {
-  someValue: 5,
+  padding: 10,
   age: 16,
-  select: 'first',
+  mode: 'dark',
   toggle: false,
   background: '#BADA55',
   nested: {
@@ -17,7 +17,7 @@ const data = {
 }
 
 const schema = {
-  someValue: {
+  padding: {
     type: Type.number,
   },
   age: {
@@ -25,9 +25,9 @@ const schema = {
     // Adults only.
     valid: (value: number) => value >= 18,
   },
-  select: {
+  mode: {
     type: Type.select,
-    values: ['first', 'second', 'third'],
+    values: ['dark', 'light'],
   },
   toggle: {
     type: Type.boolean,
@@ -47,28 +47,34 @@ const schema = {
   },
 }
 
-let updateComponentData
+let updateComponentData: React.Dispatch<any>
 
 const Result = () => {
-  const [data, setData] = useState(null)
+  const [configuration, setData] = useState(data)
 
   updateComponentData = setData
 
-  console.log('onChange', data)
-
-  if (!data) {
-    return <div>Adapt configuration above to see changes.</div>
+  if (!configuration) {
+    return null
   }
 
   return (
-    <div style={{ backgroundColor: data.background }}>
-      <p>{data.age}</p>
-      <p>{data.select}</p>
+    <div
+      style={{
+        backgroundColor: configuration.background,
+        padding: configuration.padding,
+        color: configuration.mode === 'dark' ? 'black' : 'white',
+        borderRadius: 10,
+      }}
+    >
+      <p>Adapt configuration above to see changes.</p>
+      <p>{configuration.age}</p>
     </div>
   )
 }
 
-const onChange = (data: any) => updateComponentData(data)
+// Create copy to make sure setState will update (immutability will come later).
+const onChange = (data: any) => updateComponentData({ ...data })
 
 render(
   <div style={{ fontFamily: 'sans-serif' }}>

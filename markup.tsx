@@ -34,7 +34,9 @@ const Level = ({
         const currentSchema = schema[key]
         const isLast = index === keys.length - 1
         const hasSchema =
-          typeof currentSchema.type === 'number' && currentSchema.type in Type
+          currentSchema &&
+          typeof currentSchema.type === 'number' &&
+          currentSchema.type in Type
 
         return (
           <div key={`${key}_${index}`}>
