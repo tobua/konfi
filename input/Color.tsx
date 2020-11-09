@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { usePopper } from 'react-popper'
-import useHover from '@react-hook/hover'
 import { ColorPicker } from './ColorPicker'
 
 const wrapper = {
@@ -26,6 +25,42 @@ const color = (background: string) => ({
   border: '1px solid black',
 })
 
+const close = {
+  position: 'absolute' as 'absolute',
+  padding: 0,
+  display: 'flex',
+  alignItems: 'center',
+  top: -9,
+  right: -9,
+  cursor: 'pointer',
+  background: 'white',
+  width: 20,
+  height: 20,
+  borderRadius: 40,
+  border: '1px solid black',
+  boxShadow: '1px 1px 2px gray',
+  outline: 'none',
+}
+
+const closeLine = (rotation: number) => ({
+  position: 'absolute' as 'absolute',
+  left: 4,
+  display: 'flex',
+  height: 2,
+  width: 10,
+  background: 'black',
+  transform: `rotate(${rotation}deg)`,
+})
+
+const hideBorder = {
+  position: 'absolute' as 'absolute',
+  left: -2,
+  bottom: -3,
+  height: 12,
+  width: 11,
+  background: 'white',
+}
+
 const arrow = {
   width: 10,
   height: 10,
@@ -36,6 +71,76 @@ const arrow = {
   transform: 'rotate(45deg)',
 }
 
+interface TooltipProps {
+  value: string
+  onChange: (color: string) => void
+  referenceElement: any
+  open: boolean
+  setOpen: (state: boolean) => void
+}
+
+const Tooltip = ({
+  value,
+  onChange,
+  referenceElement,
+  open,
+  setOpen,
+}: TooltipProps) => {
+  const [popperElement, setPopperElement] = useState(null)
+  const [arrowElement, setArrowElement] = useState(null)
+  const [currentValue, setCurrentValue] = useState(value)
+
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+    placement: 'right',
+  })
+
+  return (
+    <div
+      ref={setPopperElement}
+      style={{
+        ...styles.popper,
+        ...{
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? 'inherit' : 'none',
+          // Otherwise tooltip overlaid by number input switches in safari.
+          zIndex: 1,
+        },
+      }}
+      {...attributes.popper}
+    >
+      <div style={wrapper}>
+        <ColorPicker value={currentValue} onChange={setCurrentValue} />
+      </div>
+      <div ref={setArrowElement} style={styles.arrow}>
+        <div style={arrow} />
+      </div>
+      <button
+        style={close}
+        type="button"
+        onClick={() => {
+          setOpen(false)
+          if (currentValue && currentValue !== value) {
+            onChange(currentValue)
+          }
+        }}
+        onKeyUp={(event) => {
+          if (event.key === 'Escape') {
+            setOpen(false)
+            if (currentValue && currentValue !== value) {
+              onChange(currentValue)
+            }
+          }
+        }}
+      >
+        <span style={hideBorder} />
+        <span style={closeLine(45)} />
+        <span style={closeLine(-45)} />
+      </button>
+    </div>
+  )
+}
+
 interface Props {
   value: string
   onChange: (color: string) => void
@@ -43,50 +148,38 @@ interface Props {
 
 export const Color = ({ value, onChange }: Props) => {
   const [referenceElement, setReferenceElement] = useState(null)
-  const hovering = useHover(referenceElement)
-  const [popperElement, setPopperElement] = useState(null)
-  const hoveringTooltip = useHover(popperElement)
-  const [arrowElement, setArrowElement] = useState(null)
-  const [currentValue, setCurrentValue] = useState(value)
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
-    placement: 'right',
-  })
+  const [open, setOpen] = useState(false)
+  const [initialized, setInitialized] = useState(false)
 
-  // Adapt config when hover leaves and values was set.
-  useEffect(() => {
-    if (
-      currentValue &&
-      !(hovering || hoveringTooltip) &&
-      currentValue !== value
-    ) {
-      onChange(currentValue)
-    }
-  }, [hovering, hoveringTooltip, currentValue, value])
+  if (open && !initialized) {
+    setInitialized(true)
+  }
 
   return (
     <>
-      <div ref={setReferenceElement} style={color(value)} />
       <div
-        ref={setPopperElement}
-        style={{
-          ...styles.popper,
-          ...{
-            opacity: hovering || hoveringTooltip ? 1 : 0,
-            pointerEvents: hovering || hoveringTooltip ? 'inherit' : 'none',
-            // Otherwise tooltip overlaid by number input switches in safari.
-            zIndex: 1,
-          },
+        ref={setReferenceElement}
+        role="button"
+        tabIndex={0}
+        aria-label="Change color"
+        onMouseEnter={() => setOpen(true)}
+        onKeyUp={(event) => {
+          if (event.key === 'Enter') {
+            setOpen(!open)
+          }
         }}
-        {...attributes.popper}
-      >
-        <div style={wrapper}>
-          <ColorPicker value={currentValue} onChange={setCurrentValue} />
-        </div>
-        <div ref={setArrowElement} style={styles.arrow}>
-          <div style={arrow} />
-        </div>
-      </div>
+        onClick={() => setOpen(!open)}
+        style={color(value)}
+      />
+      {initialized && (
+        <Tooltip
+          value={value}
+          onChange={onChange}
+          open={open}
+          setOpen={setOpen}
+          referenceElement={referenceElement}
+        />
+      )}
     </>
   )
 }

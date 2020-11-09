@@ -2,11 +2,13 @@ import React, { useRef, useState } from 'react'
 import useMouse from '@react-hook/mouse-position'
 import hexToRgb from 'hex-rgb'
 import rgbHex from 'rgb-hex'
+import contrast from 'font-color-contrast'
 import * as styles from './styles'
 
-const board = (selectedColor: string) => ({
+const board = (selectedColor: string, mouseDown: boolean) => ({
   display: 'flex',
   position: 'relative' as 'relative',
+  cursor: mouseDown ? 'none' : 'inherit',
   height: 100,
   backgroundColor: selectedColor,
   backgroundImage: `linear-gradient(to right, transparent 0%, #FFFFFF 100%)`,
@@ -20,15 +22,20 @@ const boardOverlay = {
   height: '100%',
 }
 
-const boardHandle = (background: string, x: number, y: number) => ({
+const boardHandle = (
+  background: string,
+  x: number,
+  y: number,
+  mouseDown: boolean
+) => ({
   position: 'absolute' as 'absolute',
-  cursor: 'pointer',
-  top: y - 5,
-  left: x - 5,
-  width: 7,
-  height: 7,
+  cursor: mouseDown ? 'none' : 'pointer',
+  top: y - 6,
+  left: x - 6,
+  width: 8,
+  height: 8,
   border: '2px solid white',
-  boxShadow: '1px 1px 3px gray',
+  boxShadow: '1px 1px 2px gray',
   borderRadius: 14,
   background,
 })
@@ -245,26 +252,42 @@ const calculateHandleColor = (
     blackPercentage
   )
 
-  return `#${rgbHex(rgbColor.red, rgbColor.green, rgbColor.blue)}`
+  return `#${rgbHex(rgbColor.red, rgbColor.green, rgbColor.blue).toUpperCase()}`
 }
 
 const Board = ({
-  color,
+  boardRef,
+  lastPosition,
+  setLastPosition,
+  boardColor,
   setColor,
+  width,
+  height,
 }: {
-  color: string
+  boardRef: React.MutableRefObject<HTMLDivElement>
+  lastPosition: { x: number; y: number }
+  setLastPosition: React.Dispatch<any>
+  boardColor: string
   setColor: (color: string) => void
+  width: number
+  height: number
 }) => {
-  const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 })
-  const target = useRef<HTMLDivElement>(null)
-  const mouse = useMouse(target)
+  const [lastBoardColor, setLastBoardColor] = useState(boardColor)
+  const mouse = useMouse(boardRef)
   const [mouseDown, setMouseDown] = useState(false)
-
-  const width = target.current?.offsetWidth
-  const height = target.current?.offsetHeight
 
   let handleX = lastPosition.x
   let handleY = lastPosition.y
+
+  if (boardColor !== lastBoardColor) {
+    if (!mouseDown) {
+      setColor(
+        calculateHandleColor(boardColor, handleX, handleY, width, height)
+      )
+    }
+    setLastBoardColor(boardColor)
+    return null
+  }
 
   if (mouseDown) {
     handleX = mouse.x
@@ -273,15 +296,34 @@ const Board = ({
     // User leaves window while mouse is pressed down.
     if (handleX > width || handleY > height || handleX < 0 || handleY < 0) {
       console.log('outside')
-      setLastPosition({ x: mouse.x, y: mouse.y })
+      let nextHandleX = mouse.x
+      let nextHandleY = mouse.y
+
+      if (nextHandleX > width) {
+        nextHandleX = width
+      }
+
+      if (nextHandleX < 0) {
+        nextHandleX = 0
+      }
+
+      if (nextHandleY > height) {
+        nextHandleY = height
+      }
+
+      if (nextHandleY < 0) {
+        nextHandleY = 0
+      }
+
+      setLastPosition({ x: nextHandleX, y: nextHandleY })
       setMouseDown(false)
-      // setColor(calculateHandleColor(color, handleX, handleY, width, height))
+      // setColor(calculateHandleColor(boardColor, handleX, handleY, width, height))
       return null
     }
   }
 
   const handleColor = calculateHandleColor(
-    color,
+    boardColor,
     handleX,
     handleY,
     width,
@@ -289,23 +331,40 @@ const Board = ({
   )
 
   return (
-    <>
-      <div
-        ref={target}
-        role="button"
-        tabIndex={0}
-        onMouseDown={() => setMouseDown(true)}
-        onMouseUp={() => {
-          setLastPosition({ x: mouse.x, y: mouse.y })
-          setMouseDown(false)
-          setColor(handleColor)
-        }}
-        style={board(color)}
-      >
-        <div style={boardOverlay} />
-        <div style={boardHandle(handleColor, handleX, handleY)} />
-      </div>
-    </>
+    <div
+      ref={boardRef}
+      role="button"
+      tabIndex={0}
+      onMouseDown={() => setMouseDown(true)}
+      onMouseUp={() => {
+        let nextHandleX = mouse.x
+        let nextHandleY = mouse.y
+
+        if (nextHandleX > width) {
+          nextHandleX = width
+        }
+
+        if (nextHandleX < 0) {
+          nextHandleX = 0
+        }
+
+        if (nextHandleY > height) {
+          nextHandleY = height
+        }
+
+        if (nextHandleY < 0) {
+          nextHandleY = 0
+        }
+
+        setLastPosition({ x: nextHandleX, y: nextHandleY })
+        setMouseDown(false)
+        setColor(handleColor)
+      }}
+      style={board(boardColor, mouseDown)}
+    >
+      <div style={boardOverlay} />
+      <div style={boardHandle(handleColor, handleX, handleY, mouseDown)} />
+    </div>
   )
 }
 
@@ -315,19 +374,31 @@ interface Props {
 }
 
 export const ColorPicker = ({ value, onChange }: Props) => {
-  const [currentColor, setCurrentColor] = useState(value)
+  const boardRef = useRef<HTMLDivElement>(null)
+  const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 })
+  const [boardColor, setBoardColor] = useState(value)
   const [sliderValue, setSliderValue] = useState(0)
+
+  const width = boardRef.current?.offsetWidth
+  const height = boardRef.current?.offsetHeight
 
   return (
     <>
-      <Board color={currentColor} setColor={onChange} />
+      <Board
+        boardRef={boardRef}
+        lastPosition={lastPosition}
+        setLastPosition={setLastPosition}
+        boardColor={boardColor}
+        setColor={onChange}
+        width={width}
+        height={height}
+      />
       <style
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: rangeThumbStyles(sliderValueToRGB(sliderValue)),
         }}
       />
-
       <div style={rangeWrapper}>
         <div style={rangeBackgroundWrapper}>
           {rgbSliderHex.slice(0, -1).map((current, index) => (
@@ -348,7 +419,15 @@ export const ColorPicker = ({ value, onChange }: Props) => {
             const targetValue = Number(event.target.value)
 
             setSliderValue(targetValue)
-            setCurrentColor(sliderValueToRGB(targetValue))
+            const sliderRGB = sliderValueToRGB(targetValue)
+            const boardMatchedColor = calculateHandleColor(
+              sliderRGB,
+              lastPosition.x,
+              lastPosition.y,
+              width,
+              height
+            )
+            setBoardColor(boardMatchedColor)
           }}
         />
       </div>
@@ -356,10 +435,12 @@ export const ColorPicker = ({ value, onChange }: Props) => {
         style={{
           ...styles.input({ hasError: false }),
           width: 'calc(100% - 10px)',
+          background: value,
+          color: contrast(value),
         }}
         type="string"
-        value={currentColor}
-        onChange={(event) => setCurrentColor(event.target.value)}
+        value={value}
+        onChange={(event) => setBoardColor(event.target.value)}
       />
       <div style={popularWrapper}>
         {popularColors.map((color) => (
@@ -369,8 +450,15 @@ export const ColorPicker = ({ value, onChange }: Props) => {
             aria-label={`Select ${color} color`}
             style={popular(color)}
             onClick={() => {
-              setCurrentColor(color)
-              onChange(color)
+              const boardMatchedColor = calculateHandleColor(
+                color,
+                lastPosition.x,
+                lastPosition.y,
+                width,
+                height
+              )
+              setBoardColor(boardMatchedColor)
+              onChange(boardMatchedColor)
             }}
           />
         ))}

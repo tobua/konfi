@@ -8,11 +8,9 @@ const data = {
   mode: 'dark',
   toggle: false,
   background: '#BADA55',
-  nested: {
-    anotherValue: 'test',
-    deeplyNested: {
-      oneMoreValue: 3.33,
-    },
+  styles: {
+    borderWidth: 2,
+    borderColor: '#000000',
   },
 }
 
@@ -35,14 +33,12 @@ const schema = {
   background: {
     type: Type.hex,
   },
-  nested: {
-    anotherValue: {
-      type: Type.string,
+  styles: {
+    borderWidth: {
+      type: Type.number,
     },
-    deeplyNested: {
-      oneMoreValue: {
-        type: Type.number,
-      },
+    borderColor: {
+      type: Type.hex,
     },
   },
 }
@@ -65,10 +61,14 @@ const Result = () => {
         padding: configuration.padding,
         color: configuration.mode === 'dark' ? 'black' : 'white',
         borderRadius: 10,
+        borderWidth: configuration.styles.borderWidth,
+        borderColor: configuration.styles.borderColor,
+        borderStyle: 'solid',
       }}
     >
-      <p>Adapt configuration above to see changes.</p>
-      <p>{configuration.age}</p>
+      <h2>Result</h2>
+      <p>Adapt configuration above to see changes reflected here.</p>
+      <p>Age: {configuration.age}</p>
     </div>
   )
 }
