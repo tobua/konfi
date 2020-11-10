@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/tobua/konfi/compare/v0.1.2...v0.1.3) (2020-11-10)
+
+
+### Features
+
+* **input:** add hex/color type, demo and tests ([a650896](https://github.com/tobua/konfi/commit/a6508967e9b5529e73c8cbcbc462da950dc0e4b9))
+* **input:** calculate handle colors on picker board ([9b1f4c6](https://github.com/tobua/konfi/commit/9b1f4c6c8a0ec909ed36147abe27f48dd90155e8))
+* **input:** cross-browser styles ([835fe12](https://github.com/tobua/konfi/commit/835fe1290ab5c54757ad239aad0d6bf408c32afe))
+* **input:** drag-and-drop on color picker canvas ([268d471](https://github.com/tobua/konfi/commit/268d471de3a32930887ab80f0cd513b0d7a267be))
+* **input:** fine tuning colorpicker ([6c0c5e9](https://github.com/tobua/konfi/commit/6c0c5e9b53cb28ac9f09f74c780ccefd5cf9d680))
+* **input:** implement dropdown and toggle ([2c9019b](https://github.com/tobua/konfi/commit/2c9019b35d66e6c6295dfd56466a3226274f28e6))
+* **input:** logic to convert slider value to color ([4043f05](https://github.com/tobua/konfi/commit/4043f05be86f7f4e866a413f349c6984a2c6e4a1))
+* **input:** styling of range slider to pick base color ([8b77f1d](https://github.com/tobua/konfi/commit/8b77f1de594feeb5b57f0278a4e8428c50ef8859))
+* **input:** tooltip and some restructuring for colorpicker ([b23ff78](https://github.com/tobua/konfi/commit/b23ff78c964ea9c43ae4858de190bb571b88597b))
+
+
+### Bug Fixes
+
+* **input:** improve setting color and better demo ([671034c](https://github.com/tobua/konfi/commit/671034c8cab9846edeccd9fd4d15f6dc2f3ff2d0))
+* **input:** make sure only one picker open by using the context api ([95270a6](https://github.com/tobua/konfi/commit/95270a6994e9d39f70ecf7be003ff81d597dc6ae))
+* **input:** proper selection of colors when leaving the window ([9ecbc36](https://github.com/tobua/konfi/commit/9ecbc368680c439c533ce38e18d604fb92e94543))
+* **package:** proper json after picking lines in sourcetree ([9b0f670](https://github.com/tobua/konfi/commit/9b0f670a4d75726d71b5a37279a89ff7cd4dc2a3))
+* **types:** proper types for dropdown values ([9f6a855](https://github.com/tobua/konfi/commit/9f6a855f1cf805b6eed6470c683c4a4bc0b0d251))
+
 ### [0.1.2](https://github.com/tobua/konfi/compare/v0.1.1...v0.1.2) (2020-11-05)
 
 

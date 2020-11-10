@@ -1,6 +1,6 @@
 {
   "name": "konfi",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": "github:tobua/konfi",
   "license": "MIT",
   "author": "Matthias Giger",
@@ -26,6 +26,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "input",
+    "context.ts",
     "index.ts",
     "infer.ts",
     "Input.tsx",
