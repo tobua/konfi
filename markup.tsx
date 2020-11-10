@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Type, Schema } from './types'
 import { Input } from './input/Input'
+import { Context } from './context'
 
 const isNested = (data: any) =>
   !data || typeof data !== 'object' || Array.isArray(data)
@@ -78,10 +79,14 @@ export const markup = (
   onChange: (path: string[], value: any) => void,
   schema: Schema
 ) => {
+  const [currentColorPicker, setCurrentColorPicker] = useState(null)
+
   return (
     <div className="konfi" style={{ fontFamily: 'monospace' }}>
       <p>{'{'}</p>
-      <Level data={data} schema={schema} onChange={onChange} />
+      <Context.Provider value={{ currentColorPicker, setCurrentColorPicker }}>
+        <Level data={data} schema={schema} onChange={onChange} />
+      </Context.Provider>
       <p>{'}'}</p>
     </div>
   )

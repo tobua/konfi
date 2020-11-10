@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { usePopper } from 'react-popper'
 import { ColorPicker } from './ColorPicker'
+import { Context } from '../context'
 
 const wrapper = {
   marginLeft: 10,
@@ -147,8 +148,13 @@ interface Props {
 }
 
 export const Color = ({ value, onChange }: Props) => {
+  const { currentColorPicker, setCurrentColorPicker } = useContext(Context)
   const [referenceElement, setReferenceElement] = useState(null)
-  const [open, setOpen] = useState(false)
+  const [open, setOpenState] = useState(false)
+  const setOpen = (state: boolean) => {
+    setCurrentColorPicker(referenceElement)
+    setOpenState(state)
+  }
   const [initialized, setInitialized] = useState(false)
 
   if (open && !initialized) {
@@ -175,7 +181,7 @@ export const Color = ({ value, onChange }: Props) => {
         <Tooltip
           value={value}
           onChange={onChange}
-          open={open}
+          open={open && currentColorPicker === referenceElement}
           setOpen={setOpen}
           referenceElement={referenceElement}
         />
