@@ -255,6 +255,34 @@ const calculateHandleColor = (
   return `#${rgbHex(rgbColor.red, rgbColor.green, rgbColor.blue).toUpperCase()}`
 }
 
+// Return x and y between 0 and max values provided.
+const ensureInBounds = (x: number, y: number, maxX: number, maxY: number) => {
+  let resultX = x
+  let resultY = y
+
+  if (x > maxX) {
+    resultX = maxX
+  }
+
+  if (x < 0) {
+    resultX = 0
+  }
+
+  if (y > maxY) {
+    resultY = maxY
+  }
+
+  if (y < 0) {
+    resultY = 0
+  }
+
+  return [resultX, resultY]
+}
+
+// Store last mouse position on every render, in case the mouse leaves the tracked window this is
+// used as a fallback.
+let lastMousePosition = { x: 0, y: 0 }
+
 const Board = ({
   boardRef,
   lastPosition,
@@ -272,54 +300,20 @@ const Board = ({
   width: number
   height: number
 }) => {
-  const [lastBoardColor, setLastBoardColor] = useState(boardColor)
   const mouse = useMouse(boardRef)
-  const [mouseDown, setMouseDown] = useState(false)
 
   let handleX = lastPosition.x
   let handleY = lastPosition.y
 
-  if (boardColor !== lastBoardColor) {
-    if (!mouseDown) {
-      setColor(
-        calculateHandleColor(boardColor, handleX, handleY, width, height)
-      )
-    }
-    setLastBoardColor(boardColor)
-    return null
-  }
-
-  if (mouseDown) {
-    handleX = mouse.x
-    handleY = mouse.y
-
+  if (mouse.isDown && mouse.x && mouse.y) {
     // User leaves window while mouse is pressed down.
-    if (handleX > width || handleY > height || handleX < 0 || handleY < 0) {
-      console.log('outside')
-      let nextHandleX = mouse.x
-      let nextHandleY = mouse.y
+    // Let mouse outside, but still match cursor position inside the board.
+    ;[handleX, handleY] = ensureInBounds(mouse.x, mouse.y, width, height)
 
-      if (nextHandleX > width) {
-        nextHandleX = width
-      }
-
-      if (nextHandleX < 0) {
-        nextHandleX = 0
-      }
-
-      if (nextHandleY > height) {
-        nextHandleY = height
-      }
-
-      if (nextHandleY < 0) {
-        nextHandleY = 0
-      }
-
-      setLastPosition({ x: nextHandleX, y: nextHandleY })
-      setMouseDown(false)
-      // setColor(calculateHandleColor(boardColor, handleX, handleY, width, height))
-      return null
-    }
+    lastMousePosition = { x: handleX, y: handleY }
+  } else {
+    handleX = lastMousePosition.x
+    handleY = lastMousePosition.y
   }
 
   const handleColor = calculateHandleColor(
@@ -335,35 +329,21 @@ const Board = ({
       ref={boardRef}
       role="button"
       tabIndex={0}
-      onMouseDown={() => setMouseDown(true)}
       onMouseUp={() => {
-        let nextHandleX = mouse.x
-        let nextHandleY = mouse.y
-
-        if (nextHandleX > width) {
-          nextHandleX = width
-        }
-
-        if (nextHandleX < 0) {
-          nextHandleX = 0
-        }
-
-        if (nextHandleY > height) {
-          nextHandleY = height
-        }
-
-        if (nextHandleY < 0) {
-          nextHandleY = 0
-        }
+        const [nextHandleX, nextHandleY] = ensureInBounds(
+          mouse.x,
+          mouse.y,
+          width,
+          height
+        )
 
         setLastPosition({ x: nextHandleX, y: nextHandleY })
-        setMouseDown(false)
         setColor(handleColor)
       }}
-      style={board(boardColor, mouseDown)}
+      style={board(boardColor, mouse.isDown)}
     >
       <div style={boardOverlay} />
-      <div style={boardHandle(handleColor, handleX, handleY, mouseDown)} />
+      <div style={boardHandle(handleColor, handleX, handleY, mouse.isDown)} />
     </div>
   )
 }
@@ -419,15 +399,7 @@ export const ColorPicker = ({ value, onChange }: Props) => {
             const targetValue = Number(event.target.value)
 
             setSliderValue(targetValue)
-            const sliderRGB = sliderValueToRGB(targetValue)
-            const boardMatchedColor = calculateHandleColor(
-              sliderRGB,
-              lastPosition.x,
-              lastPosition.y,
-              width,
-              height
-            )
-            setBoardColor(boardMatchedColor)
+            setBoardColor(sliderValueToRGB(targetValue))
           }}
         />
       </div>
@@ -457,7 +429,7 @@ export const ColorPicker = ({ value, onChange }: Props) => {
                 width,
                 height
               )
-              setBoardColor(boardMatchedColor)
+              setBoardColor(color)
               onChange(boardMatchedColor)
             }}
           />
