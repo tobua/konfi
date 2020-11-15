@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/tobua/konfi/compare/v0.1.3...v0.1.4) (2020-11-15)
+
+
+### Bug Fixes
+
+* **markup:** remove empty elements and add some space ([a307c88](https://github.com/tobua/konfi/commit/a307c88e458cf6949b73a9fb1babe28eaab24215))
+
 ### [0.1.3](https://github.com/tobua/konfi/compare/v0.1.2...v0.1.3) (2020-11-10)
 
 
