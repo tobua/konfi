@@ -41,7 +41,7 @@ const Level = ({
 
         return (
           <div key={`${key}_${index}`}>
-            <div>
+            <div style={{ margin: '10px 0' }}>
               {key}:{' '}
               {nested ? (
                 <>
@@ -66,7 +66,7 @@ const Level = ({
               path={[...path, key]}
               indentation={indentation + 1}
             />
-            <p>{nested ? '' : `}${!isLast ? ',' : ''}`}</p>
+            {nested ? null : <p>{`}${!isLast ? ',' : ''}`}</p>}
           </div>
         )
       })}
