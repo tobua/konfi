@@ -1,3 +1,4 @@
+import merge from 'deepmerge'
 import { markup } from './markup'
 import { infer } from './infer'
 import { Schema } from './types'
@@ -13,7 +14,10 @@ export const Konfi = ({
   onChange: (data: any) => void
   schema?: Schema
 }) => {
+  // No need for useState as no rerender required.
+  let currentData = data
   const handleChange = (path: string[], value: any) => {
+    const result = merge({}, currentData)
     // Make the change on the data.
     path.reduce((accumulator, currentValue, currentIndex) => {
       if (
@@ -25,9 +29,12 @@ export const Konfi = ({
 
       accumulator[currentValue] = value
       return undefined
-    }, data)
+    }, result)
 
-    onChange(data)
+    onChange(result)
+
+    currentData = result
   }
-  return markup(data, handleChange, schema)
+
+  return markup(currentData, handleChange, schema)
 }

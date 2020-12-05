@@ -12,6 +12,7 @@
   "dependencies": {
     "@popperjs/core": "^2.5.4",
     "@react-hook/mouse-position": "^4.1.0",
+    "deepmerge": "^4.2.2",
     "font-color-contrast": "^1.0.3",
     "hex-rgb": "^4.2.0",
     "react-popper": "^2.2.4",

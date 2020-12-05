@@ -3,6 +3,12 @@ import '@testing-library/jest-dom'
 import { render, fireEvent } from '@testing-library/react'
 import { Konfi, Type } from '..'
 
+const getAllByTag = (tag: string, rendered: any) => {
+  return rendered.findAllByText((_, element: HTMLElement) => {
+    return element.tagName.toLowerCase() === tag
+  })
+}
+
 test('Renders input and updates data on input change.', async () => {
   const data = {
     someValue: 5,
@@ -39,15 +45,9 @@ test('Renders input and updates data on input change.', async () => {
 
   expect(onChangeMock.mock.calls.length).toBe(0)
 
-  const getAllByTag = (tag: string) => {
-    return rendered.findAllByText((content, element) => {
-      return element.tagName.toLowerCase() === tag
-    })
-  }
-
-  expect(rendered.queryByText('someValue')).toBeDefined()
-
-  const firstInput = (await getAllByTag('input'))[0] as HTMLInputElement
+  const firstInput = (
+    await getAllByTag('input', rendered)
+  )[0] as HTMLInputElement
 
   expect(firstInput.tagName.toLowerCase()).toEqual('input')
   expect(firstInput.value).toEqual('5')
@@ -61,4 +61,61 @@ test('Renders input and updates data on input change.', async () => {
 
   // Data was updated in DOM input.
   expect(firstInput.value).toEqual('6')
+})
+
+test("Input data isn't modified.", async () => {
+  const data = {
+    colors: {
+      primary: 'a',
+      secondary: 'b',
+      tertiary: 'c',
+    },
+  }
+
+  const onChangeMock = jest.fn()
+  const Component = <Konfi data={data} onChange={onChangeMock} />
+
+  const rendered = render(Component)
+
+  const inputs = await getAllByTag('input', rendered)
+
+  const primaryInput = inputs[0] as HTMLInputElement
+  const secondaryInput = inputs[1] as HTMLInputElement
+
+  expect(primaryInput.tagName.toLowerCase()).toEqual('input')
+  expect(primaryInput.value).toEqual('a')
+
+  expect(secondaryInput.tagName.toLowerCase()).toEqual('input')
+  expect(secondaryInput.value).toEqual('b')
+
+  expect(onChangeMock.mock.calls.length).toBe(0)
+
+  fireEvent.change(primaryInput, { target: { value: 'd' } })
+
+  expect(onChangeMock.mock.calls.length).toBe(1)
+
+  const firstChangeData = onChangeMock.mock.calls[0][0].colors
+
+  expect(firstChangeData.primary).toEqual('d')
+  expect(firstChangeData.secondary).toEqual('b')
+  expect(firstChangeData.tertiary).toEqual('c')
+
+  fireEvent.change(secondaryInput, { target: { value: 'e' } })
+
+  expect(onChangeMock.mock.calls.length).toBe(2)
+
+  const secondChangeData = onChangeMock.mock.calls[1][0].colors
+
+  expect(secondChangeData.primary).toEqual('d')
+  expect(secondChangeData.secondary).toEqual('e')
+  expect(secondChangeData.tertiary).toEqual('c')
+
+  // data hasn't been modified.
+  expect(data.colors.primary).toEqual('a')
+  expect(data.colors.secondary).toEqual('b')
+  expect(data.colors.tertiary).toEqual('c')
+
+  // DOM is up to date.
+  expect(primaryInput.value).toEqual('d')
+  expect(secondaryInput.value).toEqual('e')
 })
