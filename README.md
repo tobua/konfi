@@ -1,10 +1,14 @@
-<p align="center">
-  <img src="https://github.com/tobua/konfi/raw/master/logo.png" alt="konfi">
-</p>
-
 # konfi
 
+<img align="right" src="https://github.com/tobua/konfi/raw/master/logo.png" width="20%" alt="konfi" />
+
 UI for Configuration Management.
+
+- WYSIWYG editing of JSON objects
+- Callback on edits
+- Declarative or inferred schema
+
+[![konfi Demo](https://img.shields.io/static/v1?label=konfi&message=Demo&color=brightgreen)](https://tobua.github.io/konfi)
 
 ## Installation & Usage
 

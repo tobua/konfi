@@ -10,7 +10,7 @@
     "test": "padua test"
   },
   "dependencies": {
-    "@popperjs/core": "^2.5.4",
+    "@popperjs/core": "^2.6.0",
     "@react-hook/mouse-position": "^4.1.0",
     "deepmerge": "^4.2.2",
     "font-color-contrast": "^1.0.3",
@@ -36,10 +36,10 @@
     "types.ts"
   ],
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.2.2",
-    "@types/react": "^17.0.0",
-    "padua": "^0.1.4",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@types/react": "^17.0.1",
+    "padua": "^0.2.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
@@ -50,7 +50,7 @@
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfig": "./node_modules/padua/configuration/tsconfig.json"
+        "tsconfig": "./tsconfig.json"
       }
     },
     "transform": {
