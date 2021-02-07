@@ -1,4 +1,4 @@
-import { Type } from '..'
+import { Type } from '../index'
 import { infer } from '../infer'
 
 test('Correctly infers schema for basic data.', () => {

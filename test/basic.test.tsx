@@ -1,13 +1,12 @@
 import React from 'react'
 import '@testing-library/jest-dom'
 import { render, fireEvent } from '@testing-library/react'
-import { Konfi, Type } from '..'
+import { Konfi, Type } from '../index'
 
-const getAllByTag = (tag: string, rendered: any) => {
-  return rendered.findAllByText((_, element: HTMLElement) => {
-    return element.tagName.toLowerCase() === tag
-  })
-}
+const getAllByTag = (tag: string, rendered: any) =>
+  rendered.findAllByText(
+    (_, element: HTMLElement) => element.tagName.toLowerCase() === tag
+  )
 
 test('Renders input and updates data on input change.', async () => {
   const data = {
