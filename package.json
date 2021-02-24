@@ -5,12 +5,12 @@
   "license": "MIT",
   "author": "Matthias Giger",
   "scripts": {
-    "build": "padua build",
+    "test": "padua test",
     "start": "padua watch",
-    "test": "padua test"
+    "build": "padua build"
   },
   "dependencies": {
-    "@popperjs/core": "^2.6.0",
+    "@popperjs/core": "^2.8.3",
     "@react-hook/mouse-position": "^4.1.0",
     "deepmerge": "^4.2.2",
     "font-color-contrast": "^1.0.3",
@@ -38,8 +38,8 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
-    "@types/react": "^17.0.1",
-    "padua": "^0.2.4",
+    "@types/react": "^17.0.2",
+    "padua": "^0.2.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
@@ -58,6 +58,6 @@
     }
   },
   "engines": {
-    "node": ">= 13.2.0"
+    "node": ">= 14"
   }
 }

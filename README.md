@@ -1,6 +1,6 @@
 # konfi
 
-<img align="right" src="https://github.com/tobua/konfi/raw/master/logo.png" width="20%" alt="konfi" />
+<img align="right" src="https://github.com/tobua/konfi/raw/master/logo.png" width="40%" alt="konfi" />
 
 UI for Configuration Management.
 
