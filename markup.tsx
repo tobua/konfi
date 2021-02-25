@@ -1,10 +1,29 @@
 import React, { useState } from 'react'
-import { Type, Schema } from './types'
+import { Type, Schema, typeToString } from './types'
 import { Input } from './input/Input'
 import { Context } from './context'
 
-const isNested = (data: any) =>
-  !data || typeof data !== 'object' || Array.isArray(data)
+// Multiple schemas possible.
+const SchemaChoice = ({ schemas, data }: { schemas: Schema[]; data: any }) => {
+  if (!Array.isArray(schemas)) {
+    return null
+  }
+
+  return (
+    <Input
+      schema={{
+        type: Type.select,
+        values: schemas.map((schema) =>
+          schema.type ? typeToString[schema.type as Type] : 'Object'
+        ),
+      }}
+      value={data}
+      onChange={() => {}}
+    />
+  )
+}
+
+const isNested = (data: any) => typeof data === 'object'
 
 // Recursively render current object level.
 const Level = ({
@@ -34,7 +53,7 @@ const Level = ({
         const nested = isNested(current)
         const currentSchema = schema[key]
         const isLast = index === keys.length - 1
-        const hasSchema =
+        const isEditable =
           currentSchema &&
           typeof currentSchema.type === 'number' &&
           currentSchema.type in Type
@@ -42,21 +61,21 @@ const Level = ({
         return (
           <div key={`${key}_${index}`}>
             <div style={{ margin: '10px 0' }}>
-              {key}:{' '}
+              {key}: <SchemaChoice schemas={currentSchema} data={current} />
               {nested ? (
+                '{'
+              ) : (
                 <>
-                  {hasSchema ? (
+                  {isEditable ? (
                     <Input
                       schema={currentSchema}
                       value={current}
                       onChange={(value: any) => onChange([...path, key], value)}
                     />
                   ) : (
-                    data[key]
+                    current
                   )}
                 </>
-              ) : (
-                '{'
               )}
             </div>
             <Level
@@ -66,7 +85,7 @@ const Level = ({
               path={[...path, key]}
               indentation={indentation + 1}
             />
-            {nested ? null : <p>{`}${!isLast ? ',' : ''}`}</p>}
+            {nested ? <p>{`}${!isLast ? ',' : ''}`}</p> : null}
           </div>
         )
       })}

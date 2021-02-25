@@ -12,6 +12,7 @@ const data = {
     borderWidth: 2,
     borderColor: '#000000',
   },
+  arrow: false,
 }
 
 const schema = {
@@ -41,6 +42,23 @@ const schema = {
       type: Type.hex,
     },
   },
+  arrow: [
+    {
+      type: Type.boolean,
+    },
+    // {
+    //   position: {
+    //     type: Type.select,
+    //     values: ['center', 'start', 'end'],
+    //   },
+    //   url: {
+    //     type: Type.string,
+    //   },
+    //   markup: {
+    //     type: Type.string,
+    //   },
+    // },
+  ],
 }
 
 let updateComponentData: React.Dispatch<any>
