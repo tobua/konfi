@@ -5,6 +5,7 @@ export enum Type {
   hex,
   filePath,
   select,
+  unknown,
 }
 
 export const typeToString: { [Key in Type]: string } = {
@@ -14,6 +15,7 @@ export const typeToString: { [Key in Type]: string } = {
   [Type.hex]: 'Color',
   [Type.filePath]: 'File Path',
   [Type.select]: 'Selection',
+  [Type.unknown]: 'Unknown',
 }
 
 type Value = {
@@ -23,4 +25,4 @@ type Value = {
 }
 
 // Recursively defined object, either object with string keys or value descriptor.
-export type Schema = { [key: string]: Schema } | Value | (Value | Schema)[]
+export type Schema = { [key: string]: Schema } | Value | Schema[]

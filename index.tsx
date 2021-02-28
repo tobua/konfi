@@ -1,7 +1,8 @@
+import React from 'react'
 import merge from 'deepmerge'
-import { markup } from './markup'
 import { infer } from './infer'
 import { Schema } from './types'
+import { Wrapper } from './markup/Wrapper'
 
 export { Type } from './types'
 
@@ -36,5 +37,5 @@ export const Konfi = ({
     currentData = result
   }
 
-  return markup(currentData, handleChange, schema)
+  return <Wrapper data={currentData} schema={schema} onChange={handleChange} />
 }

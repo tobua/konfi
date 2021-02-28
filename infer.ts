@@ -11,6 +11,8 @@ const inferTypeFromValue = (value: any) => {
     }
     return Type.string
   }
+
+  return Type.unknown
 }
 
 const iterateProperties = (data: any, result = {}) => {

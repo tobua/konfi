@@ -46,6 +46,9 @@ const schema = {
     {
       type: Type.boolean,
     },
+    {
+      type: Type.string,
+    },
     // {
     //   position: {
     //     type: Type.select,
