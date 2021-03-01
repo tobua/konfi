@@ -8,10 +8,14 @@ export const Input = ({
   value,
   onChange,
 }: {
-  schema: Schema
+  schema: any
   value: any
   onChange: (value: any) => void
 }) => {
+  if (!(schema?.type in Type) || schema.type === Type.unknown) {
+    return value
+  }
+
   const [currentValue, setValue] = useState(value)
   let type = 'string'
   let hasError = false

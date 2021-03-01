@@ -1,6 +1,6 @@
 import { Schema, Type } from './types'
 
-const inferTypeFromValue = (value: any) => {
+export const inferTypeFromValue = (value: any) => {
   if (typeof value === 'number') {
     return Type.number
   }
@@ -10,6 +10,10 @@ const inferTypeFromValue = (value: any) => {
       return Type.hex
     }
     return Type.string
+  }
+
+  if (typeof value === 'boolean') {
+    return Type.boolean
   }
 
   return Type.unknown

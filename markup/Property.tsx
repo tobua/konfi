@@ -1,16 +1,25 @@
 import React, { useState } from 'react'
-import { Type } from '../types'
 import { Input } from '../input/Input'
 import { SchemaChoice } from './SchemaChoice'
+import { inferTypeFromValue } from '../infer'
 
 const getInitialSchemaFromData = (schemas, data) => {
   if (!Array.isArray(schemas)) {
     return schemas
   }
 
-  // TODO Infer schema from data
+  const type = inferTypeFromValue(data)
 
-  return schemas[0]
+  // Fallback to first schema if no match found.
+  let match = schemas[0]
+
+  schemas.map((schema) => {
+    if (schema.type === type) {
+      match = schema
+    }
+  })
+
+  return match
 }
 
 export const Property = ({
@@ -25,12 +34,8 @@ export const Property = ({
   const [currentSchema, setCurrentSchema] = useState(
     getInitialSchemaFromData(schema, data)
   )
-  const isEditable =
-    currentSchema &&
-    typeof currentSchema.type === 'number' &&
-    currentSchema.type in Type
 
-  // TODO
+  // TODO remove data on set current schema if no match
 
   return (
     <div style={{ margin: '10px 0' }}>
@@ -39,17 +44,11 @@ export const Property = ({
       {nested ? (
         '{'
       ) : (
-        <>
-          {isEditable ? (
-            <Input
-              schema={currentSchema}
-              value={data}
-              onChange={(value: any) => onChange(path, value)}
-            />
-          ) : (
-            data
-          )}
-        </>
+        <Input
+          schema={currentSchema}
+          value={data}
+          onChange={(value: any) => onChange(path, value)}
+        />
       )}
     </div>
   )
