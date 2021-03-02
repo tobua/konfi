@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Schema, Type } from '../types'
 import { Color } from './Color'
 import * as styles from './styles'
@@ -17,6 +17,12 @@ export const Input = ({
   }
 
   const [currentValue, setValue] = useState(value)
+
+  // Update value on outside change.
+  useEffect(() => {
+    setValue(value)
+  }, [value])
+
   let type = 'string'
   let hasError = false
 

@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '@testing-library/jest-dom'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, act } from '@testing-library/react'
 import { Konfi, Type } from '../index'
 
 const getAllByTag = (tag: string, rendered: any) =>
@@ -117,4 +117,62 @@ test("Input data isn't modified.", async () => {
   // DOM is up to date.
   expect(primaryInput.value).toEqual('d')
   expect(secondaryInput.value).toEqual('e')
+})
+
+test('Markup adapts on new props data.', async () => {
+  const data = {
+    colors: {
+      primary: 'a',
+      secondary: 'b',
+    },
+  }
+
+  let setData
+
+  const onChangeMock = jest.fn()
+
+  const Component = () => {
+    const [myData, setDataHandler] = useState(data)
+
+    console.log('rerender')
+
+    setData = setDataHandler
+
+    return <Konfi data={myData} onChange={onChangeMock} />
+  }
+
+  let rendered = render(<Component />)
+
+  const inputs = await getAllByTag('input', rendered)
+
+  const primaryInput = inputs[0] as HTMLInputElement
+  const secondaryInput = inputs[1] as HTMLInputElement
+
+  expect(primaryInput.tagName.toLowerCase()).toEqual('input')
+  expect(primaryInput.value).toEqual('a')
+
+  expect(secondaryInput.tagName.toLowerCase()).toEqual('input')
+  expect(secondaryInput.value).toEqual('b')
+
+  expect(onChangeMock.mock.calls.length).toBe(0)
+
+  fireEvent.change(primaryInput, { target: { value: 'd' } })
+
+  expect(onChangeMock.mock.calls.length).toBe(1)
+
+  const firstChangeData = onChangeMock.mock.calls[0][0].colors
+
+  expect(firstChangeData.primary).toEqual('d')
+  expect(firstChangeData.secondary).toEqual('b')
+
+  act(() => {
+    setData({
+      colors: {
+        primary: 'g',
+        secondary: 'b',
+      },
+    })
+  })
+
+  expect(primaryInput.value).toEqual('g')
 })
