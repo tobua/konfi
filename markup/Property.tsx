@@ -1,25 +1,19 @@
 import React, { useState } from 'react'
 import { Input } from '../input/Input'
-import { SchemaChoice } from './SchemaChoice'
-import { inferTypeFromValue } from '../infer'
+import {
+  SchemaChoice,
+  getInitialSchemaFromData,
+  getDataForChosenSchema,
+} from './SchemaChoice'
+import { Schema, PathChangeHandler } from '../types'
 
-const getInitialSchemaFromData = (schemas, data) => {
-  if (!Array.isArray(schemas)) {
-    return schemas
-  }
-
-  const type = inferTypeFromValue(data)
-
-  // Fallback to first schema if no match found.
-  let match = schemas[0]
-
-  schemas.map((schema) => {
-    if (schema.type === type) {
-      match = schema
-    }
-  })
-
-  return match
+interface Props {
+  property: string
+  schema: Schema
+  data: any
+  onChange: PathChangeHandler
+  nested: boolean
+  path: string[]
 }
 
 export const Property = ({
@@ -29,7 +23,7 @@ export const Property = ({
   onChange,
   nested,
   path,
-}) => {
+}: Props) => {
   // Currently selected schema, if there are several available.
   const [currentSchema, setCurrentSchema] = useState(
     getInitialSchemaFromData(schema, data)
@@ -39,14 +33,13 @@ export const Property = ({
 
   return (
     <div style={{ margin: '10px 0' }}>
-      {property}:{' '}
-      <SchemaChoice schemas={schema} data={data} onChange={setCurrentSchema} />
+      {property}: <SchemaChoice schemas={schema} onChange={setCurrentSchema} />
       {nested ? (
         '{'
       ) : (
         <Input
           schema={currentSchema}
-          value={data}
+          value={getDataForChosenSchema(currentSchema, data)}
           onChange={(value: any) => onChange(path, value)}
         />
       )}

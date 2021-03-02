@@ -134,8 +134,6 @@ test('Markup adapts on new props data.', async () => {
   const Component = () => {
     const [myData, setDataHandler] = useState(data)
 
-    console.log('rerender')
-
     setData = setDataHandler
 
     return <Konfi data={myData} onChange={onChangeMock} />

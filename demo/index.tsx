@@ -12,7 +12,7 @@ const data = {
     borderWidth: 2,
     borderColor: '#000000',
   },
-  arrow: false,
+  arrow: true,
 }
 
 const schema = {

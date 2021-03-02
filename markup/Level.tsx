@@ -1,5 +1,5 @@
 import React from 'react'
-import { Schema } from '../types'
+import { Schema, PathChangeHandler } from '../types'
 import { Property } from './Property'
 
 const isNested = (data: any) => typeof data === 'object'
@@ -14,7 +14,7 @@ export const Level = ({
 }: {
   data: any
   schema: Schema
-  onChange: (path: string[], value: any) => void
+  onChange: PathChangeHandler
   path?: string[]
   indentation?: number
 }) => {
