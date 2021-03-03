@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Schema, Type } from '../types'
+import { SchemaValue, Type } from '../../types'
 import { Color } from './Color'
-import * as styles from './styles'
+import * as styles from '../styles'
 
 export const Input = ({
   schema,
   value,
   onChange,
 }: {
-  schema: any
+  schema: SchemaValue
   value: any
   onChange: (value: any) => void
 }) => {
-  if (!(schema?.type in Type) || schema.type === Type.unknown) {
+  if (!(schema.type in Type) || schema.type === Type.unknown) {
     return value
   }
 

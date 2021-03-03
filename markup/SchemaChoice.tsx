@@ -1,8 +1,31 @@
 import React from 'react'
 import { inferTypeFromValue } from '../infer'
-import { Schema, typeToString, defaultValueForType } from '../types'
+import {
+  Schema,
+  typeToString,
+  defaultValueForType,
+  SchemaValue,
+} from '../types'
+import * as styles from './styles'
 
-export const getInitialSchemaFromData = (schemas: Schema, data: any) => {
+export const getDataForObjectSchema = (data: any, schema: Schema) => {
+  if (typeof data === 'object') {
+    return data
+  }
+
+  const result = {}
+
+  Object.keys(schema).forEach((property) => {
+    result[property] = defaultValueForType[schema[property].type]
+  })
+
+  return result
+}
+
+export const getInitialSchemaFromData = (
+  schemas: SchemaValue | Schema[],
+  data: any
+): SchemaValue => {
   if (!Array.isArray(schemas)) {
     return schemas
   }
@@ -10,7 +33,7 @@ export const getInitialSchemaFromData = (schemas: Schema, data: any) => {
   const type = inferTypeFromValue(data)
 
   // Fallback to first schema if no match found.
-  let match = schemas[0]
+  let match = schemas[0] as SchemaValue
 
   schemas.map((schema: any) => {
     if (schema.type === type) {
@@ -21,7 +44,7 @@ export const getInitialSchemaFromData = (schemas: Schema, data: any) => {
   return match
 }
 
-export const getDataForChosenSchema = (schema: any, data: any) => {
+export const getDataForChosenSchema = (schema: SchemaValue, data: any) => {
   const inferredType = inferTypeFromValue(data)
 
   // Data empty if types don't match, but kept until user change
@@ -34,8 +57,8 @@ export const getDataForChosenSchema = (schema: any, data: any) => {
 }
 
 interface Props {
-  schemas: Schema
-  onChange: (value: Schema) => void
+  schemas: SchemaValue | Schema[]
+  onChange: (value: SchemaValue) => void
 }
 
 // Multiple schemas possible.
@@ -50,11 +73,11 @@ export const SchemaChoice = ({ schemas, onChange }: Props) => {
         const index = event.target.value
         onChange(schemas[index])
       }}
-      style={{ marginRight: 10 }}
+      style={styles.spaceRight}
     >
       {schemas.map((schema: any, index) => (
         <option key={index} value={index}>
-          {typeToString[schema.type]}
+          {schema.type ? typeToString[schema.type] : 'Object'}
         </option>
       ))}
     </select>

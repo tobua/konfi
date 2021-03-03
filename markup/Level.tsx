@@ -1,5 +1,5 @@
 import React from 'react'
-import { Schema, PathChangeHandler } from '../types'
+import { Schema, PathChangeHandler, Type } from '../types'
 import { Property } from './Property'
 
 const isNested = (data: any) => typeof data === 'object'
@@ -19,7 +19,10 @@ export const Level = ({
   indentation?: number
 }) => {
   // Recursion ending condition.
-  if (!isNested(data)) {
+  if (
+    !isNested(data) &&
+    !(typeof schema === 'object' && !((schema as any).type in Type))
+  ) {
     return null
   }
 
@@ -43,6 +46,7 @@ export const Level = ({
               onChange={onChange}
               nested={nested}
               path={currentPath}
+              indentation={indentation}
             />
             <Level
               data={currentData}

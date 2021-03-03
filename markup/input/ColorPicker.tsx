@@ -3,7 +3,7 @@ import useMouse from '@react-hook/mouse-position'
 import hexToRgb from 'hex-rgb'
 import rgbHex from 'rgb-hex'
 import contrast from 'font-color-contrast'
-import * as styles from './styles'
+import * as styles from '../styles'
 
 const board = (selectedColor: string, mouseDown: boolean) => ({
   display: 'flex',

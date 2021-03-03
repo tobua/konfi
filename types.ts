@@ -28,13 +28,13 @@ export const defaultValueForType: { [Key in Type]: any } = {
   [Type.unknown]: undefined,
 }
 
-type Value = {
+export type SchemaValue = {
   type: Type
   valid?: (value: any) => boolean
   values?: string[]
 }
 
 // Recursively defined object, either object with string keys or value descriptor.
-export type Schema = { [key: string]: Schema } | Value | Schema[]
+export type Schema = { [key: string]: Schema } | Schema[] | SchemaValue
 
 export type PathChangeHandler = (path: string[], value: any) => void

@@ -49,18 +49,18 @@ const schema = {
     {
       type: Type.string,
     },
-    // {
-    //   position: {
-    //     type: Type.select,
-    //     values: ['center', 'start', 'end'],
-    //   },
-    //   url: {
-    //     type: Type.string,
-    //   },
-    //   markup: {
-    //     type: Type.string,
-    //   },
-    // },
+    {
+      position: {
+        type: Type.select,
+        values: ['center', 'start', 'end'],
+      },
+      url: {
+        type: Type.string,
+      },
+      markup: {
+        type: Type.string,
+      },
+    },
   ],
 }
 
@@ -90,6 +90,7 @@ const Result = () => {
       <h2>Result</h2>
       <p>Adapt configuration above to see changes reflected here.</p>
       <p>Age: {configuration.age}</p>
+      <p>{configuration.arrow ? 'Has' : 'No'} arrow.</p>
     </div>
   )
 }

@@ -1,11 +1,26 @@
-import React, { useState } from 'react'
-import { Input } from '../input/Input'
+import React, { ReactNode, useState } from 'react'
+import { Input } from './input/Input'
 import {
   SchemaChoice,
   getInitialSchemaFromData,
   getDataForChosenSchema,
+  getDataForObjectSchema,
 } from './SchemaChoice'
-import { Schema, PathChangeHandler } from '../types'
+import { Schema, PathChangeHandler, SchemaValue, Type } from '../types'
+import * as styles from './styles'
+import { Level } from './Level'
+
+const Wrapper = ({
+  property,
+  children,
+}: {
+  property: string
+  children: ReactNode
+}) => (
+  <div style={styles.propertyWrapper}>
+    {property}: {children}
+  </div>
+)
 
 interface Props {
   property: string
@@ -14,6 +29,7 @@ interface Props {
   onChange: PathChangeHandler
   nested: boolean
   path: string[]
+  indentation?: number
 }
 
 export const Property = ({
@@ -23,26 +39,40 @@ export const Property = ({
   onChange,
   nested,
   path,
+  indentation,
 }: Props) => {
+  if (nested) {
+    return <Wrapper property={property}>{'{'}</Wrapper>
+  }
+
+  const nonNestedSchema = schema as Schema[] | SchemaValue
+
   // Currently selected schema, if there are several available.
   const [currentSchema, setCurrentSchema] = useState(
-    getInitialSchemaFromData(schema, data)
+    getInitialSchemaFromData(nonNestedSchema, data)
   )
 
-  // TODO remove data on set current schema if no match
-
   return (
-    <div style={{ margin: '10px 0' }}>
-      {property}: <SchemaChoice schemas={schema} onChange={setCurrentSchema} />
-      {nested ? (
-        '{'
+    <Wrapper property={property}>
+      <SchemaChoice schemas={nonNestedSchema} onChange={setCurrentSchema} />
+      {!(currentSchema.type in Type) ? (
+        <>
+          {console.log('recurs', currentSchema)}
+          <Level
+            data={getDataForObjectSchema(data, currentSchema)}
+            schema={currentSchema}
+            onChange={onChange}
+            path={path}
+            indentation={indentation + 1}
+          />
+        </>
       ) : (
         <Input
-          schema={currentSchema}
+          schema={currentSchema as SchemaValue}
           value={getDataForChosenSchema(currentSchema, data)}
           onChange={(value: any) => onChange(path, value)}
         />
       )}
-    </div>
+    </Wrapper>
   )
 }

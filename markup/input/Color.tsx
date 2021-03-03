@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { usePopper } from 'react-popper'
 import { ColorPicker } from './ColorPicker'
-import { Context } from '../context'
+import { Context } from '../../context'
 
 const wrapper = {
   marginLeft: 10,

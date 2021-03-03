@@ -8,3 +8,7 @@ export const input = ({ hasError }: { hasError: boolean }) => ({
   borderColor: hasError ? 'red' : 'black',
   color: hasError ? 'red' : 'black',
 })
+
+export const spaceRight = { marginRight: 10 }
+
+export const propertyWrapper = { margin: '10px 0' }
