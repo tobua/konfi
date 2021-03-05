@@ -12,3 +12,5 @@ export const input = ({ hasError }: { hasError: boolean }) => ({
 export const spaceRight = { marginRight: 10 }
 
 export const propertyWrapper = { margin: '10px 0' }
+
+export const objectIndentation = { marginLeft: 20 }

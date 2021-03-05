@@ -5,14 +5,40 @@ import {
   typeToString,
   defaultValueForType,
   SchemaValue,
+  SchemaObjectOrValue,
+  schemaHasType,
+  Type,
 } from '../types'
 import * as styles from './styles'
 
 export const getDataForObjectSchema = (data: any, schema: Schema) => {
-  if (typeof data === 'object') {
+  const hasType = schemaHasType(schema)
+  const dataIsObject = typeof data === 'object'
+  const inferredDataType = inferTypeFromValue(data)
+
+  // Data and schema match, return.
+  if (dataIsObject && !hasType) {
     return data
   }
 
+  const type = (schema as { type: Type }).type
+
+  // Wrong data for schema, prefill with default value for type.
+  if (dataIsObject && hasType) {
+    return defaultValueForType[type]
+  }
+
+  // Inferred data type and defined schema type match.
+  if (inferredDataType === type) {
+    return data
+  }
+
+  if (hasType) {
+    return defaultValueForType[type]
+  }
+
+  // Non object data for object schema, create object with defaults
+  // matching the schema.
   const result = {}
 
   Object.keys(schema).forEach((property) => {
@@ -23,9 +49,9 @@ export const getDataForObjectSchema = (data: any, schema: Schema) => {
 }
 
 export const getInitialSchemaFromData = (
-  schemas: SchemaValue | Schema[],
+  schemas: Schema,
   data: any
-): SchemaValue => {
+): SchemaObjectOrValue => {
   if (!Array.isArray(schemas)) {
     return schemas
   }
@@ -44,20 +70,8 @@ export const getInitialSchemaFromData = (
   return match
 }
 
-export const getDataForChosenSchema = (schema: SchemaValue, data: any) => {
-  const inferredType = inferTypeFromValue(data)
-
-  // Data empty if types don't match, but kept until user change
-  // in case the user switches the schema back to a match.
-  if (schema.type !== inferredType) {
-    return defaultValueForType[schema.type]
-  }
-
-  return data
-}
-
 interface Props {
-  schemas: SchemaValue | Schema[]
+  schemas: Schema
   onChange: (value: SchemaValue) => void
 }
 

@@ -12,6 +12,10 @@ const data = {
     borderWidth: 2,
     borderColor: '#000000',
   },
+  obj: {
+    hello: 'world',
+    again: 3,
+  },
   arrow: true,
 }
 
@@ -42,6 +46,19 @@ const schema = {
       type: Type.hex,
     },
   },
+  obj: [
+    {
+      hello: {
+        type: Type.string,
+      },
+      again: {
+        type: Type.number,
+      },
+    },
+    {
+      type: Type.string,
+    },
+  ],
   arrow: [
     {
       type: Type.boolean,

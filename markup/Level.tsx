@@ -1,8 +1,15 @@
 import React from 'react'
-import { Schema, PathChangeHandler, Type } from '../types'
+import { Schema, PathChangeHandler } from '../types'
 import { Property } from './Property'
+import * as styles from './styles'
 
-const isNested = (data: any) => typeof data === 'object'
+interface Props {
+  data: Object
+  schema: Schema
+  onChange: PathChangeHandler
+  path?: string[]
+  indentation?: number
+}
 
 // Recursively render current object level.
 export const Level = ({
@@ -11,52 +18,27 @@ export const Level = ({
   onChange,
   path = [],
   indentation = 1,
-}: {
-  data: any
-  schema: Schema
-  onChange: PathChangeHandler
-  path?: string[]
-  indentation?: number
-}) => {
-  // Recursion ending condition.
-  if (
-    !isNested(data) &&
-    !(typeof schema === 'object' && !((schema as any).type in Type))
-  ) {
-    return null
-  }
-
-  const keys = Object.keys(data)
+}: Props) => {
+  const dataKeys = Object.keys(data)
 
   return (
-    <div style={{ marginLeft: 20 }}>
-      {keys.map((property, index) => {
+    <div style={styles.objectIndentation}>
+      {dataKeys.map((property, index) => {
         const currentData = data[property]
         const currentSchema = schema[property]
         const currentPath = [...path, property]
-        const nested = isNested(currentData)
-        const isLast = index === keys.length - 1
 
         return (
-          <div key={`${property}_${index}`}>
-            <Property
-              property={property}
-              schema={currentSchema}
-              data={currentData}
-              onChange={onChange}
-              nested={nested}
-              path={currentPath}
-              indentation={indentation}
-            />
-            <Level
-              data={currentData}
-              schema={currentSchema}
-              onChange={onChange}
-              path={currentPath}
-              indentation={indentation + 1}
-            />
-            {nested ? <p>{`}${!isLast ? ',' : ''}`}</p> : null}
-          </div>
+          <Property
+            key={`${property}_${index}`}
+            property={property}
+            isLastKey={index === dataKeys.length - 1}
+            schema={currentSchema}
+            data={currentData}
+            onChange={onChange}
+            path={currentPath}
+            indentation={indentation}
+          />
         )
       })}
     </div>

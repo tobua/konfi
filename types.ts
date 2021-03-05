@@ -34,7 +34,12 @@ export type SchemaValue = {
   values?: string[]
 }
 
+export type SchemaObjectOrValue = { [key: string]: Schema } | SchemaValue
+
 // Recursively defined object, either object with string keys or value descriptor.
-export type Schema = { [key: string]: Schema } | Schema[] | SchemaValue
+export type Schema = SchemaObjectOrValue | Schema[]
 
 export type PathChangeHandler = (path: string[], value: any) => void
+
+export const schemaHasType = (schema: Schema) =>
+  typeof schema === 'object' && (schema as { type?: Type }).type in Type

@@ -3,7 +3,6 @@ import { Input } from './input/Input'
 import {
   SchemaChoice,
   getInitialSchemaFromData,
-  getDataForChosenSchema,
   getDataForObjectSchema,
 } from './SchemaChoice'
 import { Schema, PathChangeHandler, SchemaValue, Type } from '../types'
@@ -22,57 +21,55 @@ const Wrapper = ({
   </div>
 )
 
+const isNestedData = (data: any) => typeof data === 'object'
+
 interface Props {
   property: string
+  isLastKey: boolean
   schema: Schema
   data: any
   onChange: PathChangeHandler
-  nested: boolean
   path: string[]
   indentation?: number
 }
 
 export const Property = ({
   property,
+  isLastKey,
   schema,
   data,
   onChange,
-  nested,
   path,
   indentation,
 }: Props) => {
-  if (nested) {
-    return <Wrapper property={property}>{'{'}</Wrapper>
-  }
-
-  const nonNestedSchema = schema as Schema[] | SchemaValue
-
   // Currently selected schema, if there are several available.
-  const [currentSchema, setCurrentSchema] = useState(
-    getInitialSchemaFromData(nonNestedSchema, data)
+  const [currentSchema, setSchema] = useState(
+    getInitialSchemaFromData(schema, data)
   )
+
+  data = getDataForObjectSchema(data, currentSchema)
+  const nested = isNestedData(data)
 
   return (
     <Wrapper property={property}>
-      <SchemaChoice schemas={nonNestedSchema} onChange={setCurrentSchema} />
-      {!(currentSchema.type in Type) ? (
-        <>
-          {console.log('recurs', currentSchema)}
-          <Level
-            data={getDataForObjectSchema(data, currentSchema)}
-            schema={currentSchema}
-            onChange={onChange}
-            path={path}
-            indentation={indentation + 1}
-          />
-        </>
+      <SchemaChoice schemas={schema} onChange={setSchema} />
+      {nested && '{'}
+      {nested ? (
+        <Level
+          data={data}
+          schema={currentSchema}
+          onChange={onChange}
+          path={path}
+          indentation={indentation + 1}
+        />
       ) : (
         <Input
           schema={currentSchema as SchemaValue}
-          value={getDataForChosenSchema(currentSchema, data)}
+          value={data}
           onChange={(value: any) => onChange(path, value)}
         />
       )}
+      {nested && <p>{`}${!isLastKey ? ',' : ''}`}</p>}
     </Wrapper>
   )
 }
