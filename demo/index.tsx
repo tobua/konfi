@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { render } from 'react-dom'
+import { Exmpl } from 'exmpl'
 import { Konfi, Type } from 'konfi'
 
 const data = {
@@ -122,27 +123,9 @@ const Result = () => {
 const onChange = (data: any) => updateComponentData({ ...data })
 
 render(
-  <div style={{ fontFamily: 'sans-serif', maxWidth: '75vw', margin: '0 auto' }}>
-    <header style={{ display: 'flex' }}>
-      <h1>konfi Demo</h1>
-      <nav
-        style={{
-          display: 'flex',
-          flex: 1,
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        }}
-      >
-        <a href="https://www.npmjs.com/package/konfi">
-          <img style={{ width: 30, marginLeft: 10 }} src="npm.svg" />
-        </a>
-        <a href="https://github.com/tobua/konfi">
-          <img style={{ width: 30, marginLeft: 10 }} src="github.png" />
-        </a>
-      </nav>
-    </header>
+  <Exmpl title="konfi Demo" npm="konfi" github="tobua/konfi">
     <Konfi data={data} schema={schema} onChange={onChange} />
     <Result />
-  </div>,
+  </Exmpl>,
   document.body
 )
