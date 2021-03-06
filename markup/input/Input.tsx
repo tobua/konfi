@@ -23,7 +23,7 @@ export const Input = ({
     setValue(value)
   }, [value])
 
-  let type = 'string'
+  let type = 'text'
   let hasError = false
 
   if (schema.type === Type.number) {
@@ -60,6 +60,7 @@ export const Input = ({
   if (schema.type === Type.boolean) {
     return (
       <input
+        key={type}
         checked={currentValue}
         type="checkbox"
         onChange={(event) => {
@@ -86,6 +87,7 @@ export const Input = ({
 
   return (
     <input
+      key={type}
       style={styles.input({ hasError })}
       value={currentValue}
       onChange={(event) => {

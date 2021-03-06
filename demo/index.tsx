@@ -67,6 +67,12 @@ const schema = {
       type: Type.string,
     },
     {
+      type: Type.number,
+    },
+    {
+      type: Type.boolean,
+    },
+    {
       position: {
         type: Type.select,
         values: ['center', 'start', 'end'],

@@ -3,7 +3,7 @@ import { inferTypeFromValue } from '../infer'
 import {
   Schema,
   typeToString,
-  defaultValueForType,
+  defaultValueForSchema,
   SchemaValue,
   SchemaObjectOrValue,
   schemaHasType,
@@ -25,7 +25,7 @@ export const getDataForObjectSchema = (data: any, schema: Schema) => {
 
   // Wrong data for schema, prefill with default value for type.
   if (dataIsObject && hasType) {
-    return defaultValueForType[type]
+    return defaultValueForSchema(schema)
   }
 
   // Inferred data type and defined schema type match.
@@ -34,7 +34,7 @@ export const getDataForObjectSchema = (data: any, schema: Schema) => {
   }
 
   if (hasType) {
-    return defaultValueForType[type]
+    return defaultValueForSchema(schema)
   }
 
   // Non object data for object schema, create object with defaults
@@ -42,7 +42,9 @@ export const getDataForObjectSchema = (data: any, schema: Schema) => {
   const result = {}
 
   Object.keys(schema).forEach((property) => {
-    result[property] = defaultValueForType[schema[property].type]
+    const propertySchema = schema[property]
+    // Recursive call to ensure nested object schemas created as well.
+    result[property] = getDataForObjectSchema(undefined, propertySchema)
   })
 
   return result
@@ -91,7 +93,7 @@ export const SchemaChoice = ({ schemas, onChange }: Props) => {
     >
       {schemas.map((schema: any, index) => (
         <option key={index} value={index}>
-          {schema.type ? typeToString[schema.type] : 'Object'}
+          {schema.type in Type ? typeToString[schema.type] : 'Object'}
         </option>
       ))}
     </select>
