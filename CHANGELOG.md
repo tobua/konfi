@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/tobua/konfi/compare/v0.1.6...v0.1.7) (2021-03-06)
+
+
+### Features
+
+* **schema:** clean up schema choice markup logic ([1ab8d59](https://github.com/tobua/konfi/commit/1ab8d5971917d092c35f7e073ad53679b3e2a6de))
+* **schema:** defaults for nested object choice & move input into markup ([4146202](https://github.com/tobua/konfi/commit/414620247281196893ea956dcaaf53cfa1987ec8))
+* **schema:** further schema choice implementation and separating markup ([528ce0d](https://github.com/tobua/konfi/commit/528ce0dd95b3dd806861dd26078013c2ac127058))
+
+
+### Bug Fixes
+
+* **props:** update inputs on data prop change and add test ([58b801f](https://github.com/tobua/konfi/commit/58b801ffef83aef1437d084faa0697072d662360))
+* **schema:** proper initial data for chosen schema & type improvements ([2043b66](https://github.com/tobua/konfi/commit/2043b668620546b9ceaa70ff1d299d99cbe0a496))
+
 ### [0.1.6](https://github.com/tobua/konfi/compare/v0.1.5...v0.1.6) (2021-02-07)
 
 ### [0.1.5](https://github.com/tobua/konfi/compare/v0.1.4...v0.1.5) (2020-12-05)

@@ -1,6 +1,6 @@
 {
   "name": "konfi",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "repository": "github:tobua/konfi",
   "license": "MIT",
   "author": "Matthias Giger",
@@ -24,17 +24,10 @@
   },
   "main": "dist/index.js",
   "sideEffects": false,
-  "source": "index.js",
+  "source": "index.tsx",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "input",
-    "context.ts",
-    "index.ts",
-    "infer.ts",
-    "Input.tsx",
-    "markup.tsx",
-    "types.ts"
+    "dist"
   ],
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.9",
