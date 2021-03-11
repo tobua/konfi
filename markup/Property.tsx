@@ -59,7 +59,14 @@ export const Property = ({
 
   return (
     <Wrapper property={property}>
-      <SchemaChoice schemas={schema} onChange={setSchema} />
+      <SchemaChoice
+        schemas={schema}
+        onChange={(value: SchemaValue) => {
+          setSchema(value)
+          setData(getDataForObjectSchema(data, value))
+          onChange()
+        }}
+      />
       {nested && '{'}
       {nested ? (
         <Level

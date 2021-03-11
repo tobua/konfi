@@ -46,15 +46,14 @@ export const defaultValueForSchema = (schema: Schema) => {
     return undefined
   }
 
-  const type = (schema as { type: Type }).type
+  const typedSchema = schema as { type: Type; default?: number }
+  const type = typedSchema.type
 
   if (type === Type.select) {
-    return schema.values[
-      (schema as { default: number }).default ?? defaultValuesForType[type]
-    ]
+    return schema.values[typedSchema.default ?? defaultValuesForType[type]]
   }
 
-  return defaultValuesForType[type]
+  return typedSchema.default ?? defaultValuesForType[type]
 }
 
 export type SchemaValue = {

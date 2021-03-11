@@ -128,18 +128,17 @@ test('Switching between object and regular schemas.', async () => {
   // Edit input.
   fireEvent.change(stringInput, { target: { value: 'texting' } })
 
-  expect(onChangeMock.mock.calls.length).toBe(1)
-  expect(onChangeMock.mock.calls[0][0].someValue).toEqual('texting')
+  expect(onChangeMock.mock.calls.length).toBe(2)
+  expect(onChangeMock.mock.calls[1][0].someValue).toEqual('texting')
 
-  // Back and forth selection switch will keep input data intact.
-  // NOTE except when switching to object.
+  // Back and forth selection switch won't keep input data intact.
   fireEvent.change(selectionInput, { target: { value: 2 } })
   fireEvent.change(selectionInput, { target: { value: 1 } })
 
   valueInputs = (await getAllByTag('input', rendered)) as HTMLInputElement[]
   stringInput = valueInputs[0]
 
-  expect(stringInput.value).toEqual('texting')
+  expect(stringInput.value).toEqual('')
 
   // Switch to number schema.
   fireEvent.change(selectionInput, { target: { value: 2 } })
@@ -155,6 +154,67 @@ test('Switching between object and regular schemas.', async () => {
   // Edit input.
   fireEvent.change(numberInput, { target: { value: 7 } })
 
+  expect(onChangeMock.mock.calls.length).toBe(6)
+  expect(onChangeMock.mock.calls[5][0].someValue).toEqual(7)
+})
+
+test('Defaults applied and onChange called when switching schema.', async () => {
+  const data = {
+    click: true,
+  }
+
+  const schema = {
+    click: [
+      {
+        type: Type.boolean,
+      },
+      {
+        denominator: {
+          type: Type.number,
+          default: 2,
+        },
+      },
+    ],
+  }
+
+  const onChangeMock = jest.fn()
+  const Component = (
+    <Konfi data={data} schema={schema} onChange={onChangeMock} />
+  )
+
+  const rendered = render(Component)
+
+  expect(onChangeMock.mock.calls.length).toBe(0)
+
+  const selectionInput = (
+    await getAllByTag('select', rendered)
+  )[0] as HTMLSelectElement
+
+  let valueInput = (await getAllByTag('input', rendered))[0] as HTMLInputElement
+
+  expect(valueInput.checked).toEqual(true)
+
+  expect(onChangeMock.mock.calls.length).toBe(0)
+
+  fireEvent.change(selectionInput, { target: { value: 1 } })
+
+  // Schema selection is propagated out.
+  expect(onChangeMock.mock.calls.length).toBe(1)
+  expect(onChangeMock.mock.calls[0][0].click.denominator).toBe(2)
+
+  valueInput = (await getAllByTag('input', rendered))[0] as HTMLInputElement
+
+  // Defined default from schema applied.
+  expect(valueInput.value).toEqual('2')
+
+  fireEvent.change(selectionInput, { target: { value: 0 } })
+
+  // Schema selection is propagated out.
   expect(onChangeMock.mock.calls.length).toBe(2)
-  expect(onChangeMock.mock.calls[0][0].someValue).toEqual(7)
+  expect(onChangeMock.mock.calls[1][0].click).toBe(false)
+
+  valueInput = (await getAllByTag('input', rendered))[0] as HTMLInputElement
+
+  // Defined default from schema applied.
+  expect(valueInput.checked).toEqual(false)
 })
