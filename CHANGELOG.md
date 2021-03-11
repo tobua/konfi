@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/tobua/konfi/compare/v0.1.8...v0.1.9) (2021-03-11)
+
+
+### Bug Fixes
+
+* **schema:** notify user about new default data when switching schema ([923a357](https://github.com/tobua/konfi/commit/923a357798d6357c4a38e64efc0e882af6e2b54d))
+
 ### [0.1.8](https://github.com/tobua/konfi/compare/v0.1.7...v0.1.8) (2021-03-06)
 
 ### [0.1.7](https://github.com/tobua/konfi/compare/v0.1.6...v0.1.7) (2021-03-06)
