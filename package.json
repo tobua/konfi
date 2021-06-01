@@ -10,17 +10,14 @@
     "build": "padua build"
   },
   "dependencies": {
-    "@popperjs/core": "^2.9.1",
-    "@react-hook/mouse-position": "^4.1.0",
+    "@popperjs/core": "^2.9.2",
+    "burano": "^1.0.0",
     "deepmerge": "^4.2.2",
-    "font-color-contrast": "^1.0.3",
-    "hex-rgb": "^4.2.0",
-    "react-popper": "^2.2.4",
-    "rgb-hex": "^3.0.0"
+    "react-popper": "^2.2.5"
   },
   "peerDependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "main": "dist/index.js",
   "sideEffects": false,
@@ -30,12 +27,12 @@
     "dist"
   ],
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@types/react": "^17.0.3",
-    "padua": "^0.3.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.7",
+    "@types/react": "^17.0.8",
+    "padua": "^0.3.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {
@@ -47,9 +44,19 @@
         "tsconfig": "./tsconfig.json"
       }
     },
+    "testEnvironment": "jsdom",
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    }
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.jsx?$": [
+        "babel-jest",
+        {
+          "configFile": "./node_modules/padua/configuration/.babelrc"
+        }
+      ]
+    },
+    "transformIgnorePatterns": [
+      "node_modules/cint"
+    ]
   },
   "engines": {
     "node": ">= 14"

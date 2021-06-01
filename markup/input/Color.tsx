@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { usePopper } from 'react-popper'
-import { ColorPicker } from './ColorPicker'
+import { ColorPicker } from 'burano'
 import { Context } from '../../context'
 
 const wrapper = {
@@ -111,7 +111,7 @@ const Tooltip = ({
       {...attributes.popper}
     >
       <div style={wrapper}>
-        <ColorPicker value={currentValue} onChange={setCurrentValue} />
+        <ColorPicker color={currentValue} onColor={setCurrentValue} />
       </div>
       <div ref={setArrowElement} style={styles.arrow}>
         <div style={arrow} />
