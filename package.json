@@ -1,7 +1,7 @@
 {
   "name": "konfi",
   "description": "Standard for Configuration Management and WYSIWYG Editor.",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "repository": "github:tobua/konfi",
   "homepage": "https://tobua.github.io/konfi",
   "license": "MIT",
