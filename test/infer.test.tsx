@@ -32,9 +32,7 @@ test('Correctly infers schema for basic data.', () => {
 
   expect(schema).toBeDefined()
   expect(schema.someValue.type).toEqual(actualSchema.someValue.type)
-  expect(schema.nested.anotherValue.type).toEqual(
-    actualSchema.nested.anotherValue.type
-  )
+  expect(schema.nested.anotherValue.type).toEqual(actualSchema.nested.anotherValue.type)
   expect(schema.nested.deeplyNested.oneMoreValue.type).toEqual(
     actualSchema.nested.deeplyNested.oneMoreValue.type
   )

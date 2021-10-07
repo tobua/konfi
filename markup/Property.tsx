@@ -1,22 +1,12 @@
 import React, { ReactNode, useState, useContext } from 'react'
 import { Input } from './input/Input'
-import {
-  SchemaChoice,
-  getInitialSchemaFromData,
-  getDataForObjectSchema,
-} from './SchemaChoice'
+import { SchemaChoice, getInitialSchemaFromData, getDataForObjectSchema } from './SchemaChoice'
 import { Schema, SchemaValue } from '../types'
 import * as styles from './styles'
 import { Level } from './Level'
 import { Context } from '../context'
 
-const Wrapper = ({
-  property,
-  children,
-}: {
-  property: string
-  children: ReactNode
-}) => (
+const Wrapper = ({ property, children }: { property: string; children: ReactNode }) => (
   <div style={styles.propertyWrapper}>
     {property}: {children}
   </div>
@@ -33,19 +23,10 @@ interface Props {
   indentation?: number
 }
 
-export const Property = ({
-  property,
-  isLastKey,
-  schema,
-  getData,
-  setData,
-  indentation,
-}: Props) => {
+export const Property = ({ property, isLastKey, schema, getData, setData, indentation }: Props) => {
   let data = getData()
   // Currently selected schema, if there are several available.
-  const [currentSchema, setSchema] = useState(
-    getInitialSchemaFromData(schema, data)
-  )
+  const [currentSchema, setSchema] = useState(getInitialSchemaFromData(schema, data))
   const { onChange } = useContext(Context)
 
   data = getDataForObjectSchema(data, currentSchema)
@@ -69,11 +50,7 @@ export const Property = ({
       />
       {nested && '{'}
       {nested ? (
-        <Level
-          data={data}
-          schema={currentSchema}
-          indentation={indentation + 1}
-        />
+        <Level data={data} schema={currentSchema} indentation={indentation + 1} />
       ) : (
         <Input
           schema={currentSchema as SchemaValue}

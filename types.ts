@@ -18,7 +18,7 @@ export const typeToString: { [Key in Type]: string } = {
   [Type.unknown]: 'Unknown',
 }
 
-const defaultValuesForType: { [Key in Type]: any } = {
+export const defaultValuesForType: { [Key in Type]: any } = {
   [Type.number]: 0,
   [Type.string]: '',
   [Type.boolean]: false,
@@ -39,23 +39,6 @@ export const typeRequiresInitialization: { [Key in Type]: boolean } = {
   [Type.unknown]: false,
 }
 
-export const defaultValueForSchema = (schema: Schema) => {
-  const hasType = schemaHasType(schema)
-
-  if (!hasType) {
-    return undefined
-  }
-
-  const typedSchema = schema as { type: Type; default?: number }
-  const type = typedSchema.type
-
-  if (type === Type.select) {
-    return schema.values[typedSchema.default ?? defaultValuesForType[type]]
-  }
-
-  return typedSchema.default ?? defaultValuesForType[type]
-}
-
 export type SchemaValue = {
   type: Type
   valid?: (value: any) => boolean
@@ -69,6 +52,3 @@ export type SchemaObjectOrValue = { [key: string]: Schema } | SchemaValue
 export type Schema = SchemaObjectOrValue | Schema[]
 
 export type OnChangeHandler = (data: Object) => void
-
-export const schemaHasType = (schema: Schema) =>
-  typeof schema === 'object' && (schema as { type?: Type }).type in Type

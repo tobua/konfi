@@ -16,7 +16,7 @@ interface Props {
 export const Konfi = ({ data, schema = infer(data), onChange }: Props) => {
   const [currentColorPicker, setCurrentColorPicker] = useState(null)
   // Create a copy of the data to avoid modifying user data.
-  let localData = merge({}, data)
+  const localData = merge({}, data)
 
   return (
     <div className="konfi" style={{ fontFamily: 'monospace' }}>

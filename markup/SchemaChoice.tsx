@@ -3,13 +3,32 @@ import { inferTypeFromValue } from '../infer'
 import {
   Schema,
   typeToString,
-  defaultValueForSchema,
   SchemaValue,
   SchemaObjectOrValue,
-  schemaHasType,
   Type,
+  defaultValuesForType,
 } from '../types'
 import * as styles from './styles'
+
+const schemaHasType = (schema: Schema) =>
+  typeof schema === 'object' && (schema as { type?: Type }).type in Type
+
+const defaultValueForSchema = (schema: Schema) => {
+  const hasType = schemaHasType(schema)
+
+  if (!hasType) {
+    return undefined
+  }
+
+  const typedSchema = schema as { type: Type; default?: number }
+  const { type } = typedSchema
+
+  if (type === Type.select) {
+    return schema.values[typedSchema.default ?? defaultValuesForType[type]]
+  }
+
+  return typedSchema.default ?? defaultValuesForType[type]
+}
 
 export const getDataForObjectSchema = (data: any, schema: Schema) => {
   const hasType = schemaHasType(schema)
@@ -21,7 +40,7 @@ export const getDataForObjectSchema = (data: any, schema: Schema) => {
     return data
   }
 
-  const type = (schema as { type: Type }).type
+  const { type } = schema as { type: Type }
 
   // Wrong data for schema, prefill with default value for type.
   if (dataIsObject && hasType) {
@@ -50,10 +69,7 @@ export const getDataForObjectSchema = (data: any, schema: Schema) => {
   return result
 }
 
-export const getInitialSchemaFromData = (
-  schemas: Schema,
-  data: any
-): SchemaObjectOrValue => {
+export const getInitialSchemaFromData = (schemas: Schema, data: any): SchemaObjectOrValue => {
   if (!Array.isArray(schemas)) {
     return schemas
   }
@@ -61,15 +77,7 @@ export const getInitialSchemaFromData = (
   const type = inferTypeFromValue(data)
 
   // Fallback to first schema if no match found.
-  let match = schemas[0] as SchemaValue
-
-  schemas.map((schema: any) => {
-    if (schema.type === type) {
-      match = schema
-    }
-  })
-
-  return match
+  return schemas.find((schema: any) => schema.type === type)?.[0] ?? (schemas[0] as SchemaValue)
 }
 
 interface Props {

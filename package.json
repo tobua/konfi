@@ -1,16 +1,18 @@
 {
   "name": "konfi",
+  "description": "Standard for Configuration Management and WYSIWYG Editor.",
   "version": "0.1.10",
   "repository": "github:tobua/konfi",
+  "homepage": "https://tobua.github.io/konfi",
   "license": "MIT",
   "author": "Matthias Giger",
   "scripts": {
-    "test": "padua test",
+    "build": "padua build",
     "start": "padua watch",
-    "build": "padua build"
+    "test": "padua test"
   },
   "dependencies": {
-    "@popperjs/core": "^2.9.2",
+    "@popperjs/core": "^2.10.2",
     "burano": "^1.0.0",
     "deepmerge": "^4.2.2",
     "react-popper": "^2.2.5"
@@ -20,17 +22,25 @@
     "react-dom": "^17.0.2"
   },
   "main": "dist/index.js",
+  "exports": {
+    "default": "./dist/index.js"
+  },
   "sideEffects": false,
   "source": "index.tsx",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "keywords": [
+    "configuration",
+    "wysiwyg",
+    "properties"
+  ],
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.12.0",
-    "@testing-library/react": "^11.2.7",
-    "@types/react": "^17.0.8",
-    "padua": "^0.3.6",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.2",
+    "@types/react": "^17.0.27",
+    "padua": "^0.3.14",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

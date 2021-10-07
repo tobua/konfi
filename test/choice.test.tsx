@@ -4,9 +4,7 @@ import { render, fireEvent } from '@testing-library/react'
 import { Konfi, Type } from '../index'
 
 const getAllByTag = (tag: string, rendered: any) =>
-  rendered.findAllByText(
-    (_, element: HTMLElement) => element.tagName.toLowerCase() === tag
-  )
+  rendered.findAllByText((_, element: HTMLElement) => element.tagName.toLowerCase() === tag)
 
 test('Different schemas can be defined for a property.', async () => {
   const data = {
@@ -25,21 +23,15 @@ test('Different schemas can be defined for a property.', async () => {
   }
 
   const onChangeMock = jest.fn()
-  const Component = (
-    <Konfi data={data} schema={schema} onChange={onChangeMock} />
-  )
+  const Component = <Konfi data={data} schema={schema} onChange={onChangeMock} />
 
   const rendered = render(Component)
 
   expect(onChangeMock.mock.calls.length).toBe(0)
 
-  const selectionInput = (
-    await getAllByTag('select', rendered)
-  )[0] as HTMLSelectElement
+  const selectionInput = (await getAllByTag('select', rendered))[0] as HTMLSelectElement
 
-  const valueInput = (
-    await getAllByTag('input', rendered)
-  )[0] as HTMLInputElement
+  const valueInput = (await getAllByTag('input', rendered))[0] as HTMLInputElement
 
   expect(selectionInput.tagName.toLowerCase()).toEqual('select')
   // First option selected
@@ -87,18 +79,13 @@ test('Switching between object and regular schemas.', async () => {
   }
 
   const onChangeMock = jest.fn()
-  const Component = (
-    <Konfi data={data} schema={schema} onChange={onChangeMock} />
-  )
+  const Component = <Konfi data={data} schema={schema} onChange={onChangeMock} />
 
   const rendered = render(Component)
 
   expect(onChangeMock.mock.calls.length).toBe(0)
 
-  const selectionInputs = (await getAllByTag(
-    'select',
-    rendered
-  )) as HTMLSelectElement[]
+  const selectionInputs = (await getAllByTag('select', rendered)) as HTMLSelectElement[]
 
   expect(selectionInputs.length).toEqual(1)
 
@@ -136,7 +123,7 @@ test('Switching between object and regular schemas.', async () => {
   fireEvent.change(selectionInput, { target: { value: 1 } })
 
   valueInputs = (await getAllByTag('input', rendered)) as HTMLInputElement[]
-  stringInput = valueInputs[0]
+  ;[stringInput] = valueInputs
 
   expect(stringInput.value).toEqual('')
 
@@ -178,17 +165,13 @@ test('Defaults applied and onChange called when switching schema.', async () => 
   }
 
   const onChangeMock = jest.fn()
-  const Component = (
-    <Konfi data={data} schema={schema} onChange={onChangeMock} />
-  )
+  const Component = <Konfi data={data} schema={schema} onChange={onChangeMock} />
 
   const rendered = render(Component)
 
   expect(onChangeMock.mock.calls.length).toBe(0)
 
-  const selectionInput = (
-    await getAllByTag('select', rendered)
-  )[0] as HTMLSelectElement
+  const selectionInput = (await getAllByTag('select', rendered))[0] as HTMLSelectElement
 
   let valueInput = (await getAllByTag('input', rendered))[0] as HTMLInputElement
 

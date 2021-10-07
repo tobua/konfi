@@ -99,11 +99,7 @@ export const Input = ({
 
         setValue(changedValue)
         // Only update if value is valid.
-        if (
-          !schema.valid ||
-          typeof schema.valid !== 'function' ||
-          schema.valid(changedValue)
-        ) {
+        if (!schema.valid || typeof schema.valid !== 'function' || schema.valid(changedValue)) {
           onChange(changedValue)
         }
       }}

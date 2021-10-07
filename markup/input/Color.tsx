@@ -80,13 +80,7 @@ interface TooltipProps {
   setOpen: (state: boolean) => void
 }
 
-const Tooltip = ({
-  value,
-  onChange,
-  referenceElement,
-  open,
-  setOpen,
-}: TooltipProps) => {
+const Tooltip = ({ value, onChange, referenceElement, open, setOpen }: TooltipProps) => {
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
   const [currentValue, setCurrentValue] = useState(value)

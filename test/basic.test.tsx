@@ -4,9 +4,7 @@ import { render, fireEvent, act } from '@testing-library/react'
 import { Konfi, Type } from '../index'
 
 const getAllByTag = (tag: string, rendered: any) =>
-  rendered.findAllByText(
-    (_, element: HTMLElement) => element.tagName.toLowerCase() === tag
-  )
+  rendered.findAllByText((_, element: HTMLElement) => element.tagName.toLowerCase() === tag)
 
 test('Renders input and updates data on input change.', async () => {
   const data = {
@@ -36,17 +34,13 @@ test('Renders input and updates data on input change.', async () => {
   }
 
   const onChangeMock = jest.fn()
-  const Component = (
-    <Konfi data={data} schema={schema} onChange={onChangeMock} />
-  )
+  const Component = <Konfi data={data} schema={schema} onChange={onChangeMock} />
 
   const rendered = render(Component)
 
   expect(onChangeMock.mock.calls.length).toBe(0)
 
-  const firstInput = (
-    await getAllByTag('input', rendered)
-  )[0] as HTMLInputElement
+  const firstInput = (await getAllByTag('input', rendered))[0] as HTMLInputElement
 
   expect(firstInput.tagName.toLowerCase()).toEqual('input')
   expect(firstInput.value).toEqual('5')
@@ -139,7 +133,7 @@ test('Markup adapts on new props data.', async () => {
     return <Konfi data={myData} onChange={onChangeMock} />
   }
 
-  let rendered = render(<Component />)
+  const rendered = render(<Component />)
 
   const inputs = await getAllByTag('input', rendered)
 
