@@ -3,10 +3,10 @@
     "title": "konfi Demo"
   },
   "dependencies": {
-    "exmpl": "^2.2.1",
-    "papua": "^0.1.32",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "exmpl": "^3.0.0",
+    "papua": "^1.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "localDependencies": {
     "konfi": ".."

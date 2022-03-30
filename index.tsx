@@ -13,7 +13,7 @@ interface Props {
   schema?: Schema
 }
 
-export const Konfi = ({ data, schema = infer(data), onChange }: Props) => {
+export function Konfi({ data, schema = infer(data), onChange }: Props) {
   const [currentColorPicker, setCurrentColorPicker] = useState(null)
   // Create a copy of the data to avoid modifying user data.
   const localData = merge({}, data)
@@ -22,6 +22,7 @@ export const Konfi = ({ data, schema = infer(data), onChange }: Props) => {
     <div className="konfi" style={{ fontFamily: 'monospace' }}>
       <p>{'{'}</p>
       <Context.Provider
+        // eslint-disable-next-line react/jsx-no-constructed-context-values
         value={{
           currentColorPicker,
           setCurrentColorPicker,

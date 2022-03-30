@@ -125,7 +125,7 @@ test('Markup adapts on new props data.', async () => {
 
   const onChangeMock = jest.fn()
 
-  const Component = () => {
+  function Component() {
     const [myData, setDataHandler] = useState(data)
 
     setData = setDataHandler

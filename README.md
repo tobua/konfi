@@ -1,6 +1,6 @@
 # konfi
 
-<img align="right" src="https://github.com/tobua/konfi/raw/master/logo.png" width="40%" alt="konfi" />
+<img align="right" src="https://github.com/tobua/konfi/raw/main/logo.png" width="40%" alt="konfi" />
 
 UI for Configuration Management.
 
@@ -18,7 +18,7 @@ npm i konfi
 
 ```jsx
 import React from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Konfi, Type } from 'konfi'
 
 const data = {
@@ -38,7 +38,7 @@ const schema = {
 
 const onChange = (data: any) => console.log('new configuration', data)
 
-render(
+createRoot(document.body).render(
   <div>
     <Konfi schema={schema} data={data} onChange={onChange} />
   </div>,

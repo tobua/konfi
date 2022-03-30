@@ -6,11 +6,13 @@ import * as styles from './styles'
 import { Level } from './Level'
 import { Context } from '../context'
 
-const Wrapper = ({ property, children }: { property: string; children: ReactNode }) => (
-  <div style={styles.propertyWrapper}>
-    {property}: {children}
-  </div>
-)
+function Wrapper({ property, children }: { property: string; children: ReactNode }) {
+  return (
+    <div style={styles.propertyWrapper}>
+      {property}: {children}
+    </div>
+  )
+}
 
 const isNestedData = (data: any) => typeof data === 'object'
 
@@ -23,7 +25,7 @@ interface Props {
   indentation?: number
 }
 
-export const Property = ({ property, isLastKey, schema, getData, setData, indentation }: Props) => {
+export function Property({ property, isLastKey, schema, getData, setData, indentation }: Props) {
   let data = getData()
   // Currently selected schema, if there are several available.
   const [currentSchema, setSchema] = useState(getInitialSchemaFromData(schema, data))

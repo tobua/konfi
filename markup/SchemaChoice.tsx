@@ -86,7 +86,7 @@ interface Props {
 }
 
 // Multiple schemas possible.
-export const SchemaChoice = ({ schemas, onChange }: Props) => {
+export function SchemaChoice({ schemas, onChange }: Props) {
   if (!Array.isArray(schemas)) {
     return null
   }

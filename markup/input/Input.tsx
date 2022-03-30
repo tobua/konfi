@@ -3,7 +3,7 @@ import { SchemaValue, Type } from '../../types'
 import { Color } from './Color'
 import * as styles from '../styles'
 
-export const Input = ({
+export function Input({
   schema,
   value,
   onChange,
@@ -11,7 +11,7 @@ export const Input = ({
   schema: SchemaValue
   value: any
   onChange: (value: any) => void
-}) => {
+}) {
   if (!(schema.type in Type) || schema.type === Type.unknown) {
     return value
   }

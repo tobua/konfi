@@ -1,7 +1,7 @@
 {
   "name": "konfi",
   "description": "Standard for Configuration Management and WYSIWYG Editor.",
-  "version": "0.1.11",
+  "version": "0.0.0-development",
   "repository": "github:tobua/konfi",
   "homepage": "https://tobua.github.io/konfi",
   "license": "MIT",
@@ -12,20 +12,20 @@
     "test": "padua test"
   },
   "dependencies": {
-    "@popperjs/core": "^2.10.2",
-    "burano": "^1.0.0",
+    "@popperjs/core": "^2.11.4",
+    "burano": "^2.0.0",
     "deepmerge": "^4.2.2",
     "react-popper": "^2.2.5"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
+  "sideEffects": false,
   "main": "dist/index.js",
   "exports": {
     "default": "./dist/index.js"
   },
-  "sideEffects": false,
   "source": "index.tsx",
   "types": "dist/index.d.ts",
   "files": [
@@ -37,12 +37,12 @@
     "properties"
   ],
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.1.2",
-    "@types/react": "^17.0.27",
-    "padua": "^0.3.14",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "@testing-library/jest-dom": "^5.16.3",
+    "@testing-library/react": "^12.1.4",
+    "@types/react": "^17.0.43",
+    "padua": "^0.5.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {

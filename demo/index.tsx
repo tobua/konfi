@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Exmpl } from 'exmpl'
 import { Konfi, Type } from 'konfi'
 
@@ -122,10 +122,9 @@ const Result = () => {
 // Create copy to make sure setState will update (immutability will come later).
 const onChange = (data: any) => updateComponentData({ ...data })
 
-render(
+createRoot(document.body).render(
   <Exmpl title="konfi Demo" npm="konfi" github="tobua/konfi">
     <Konfi data={data} schema={schema} onChange={onChange} />
     <Result />
-  </Exmpl>,
-  document.body
+  </Exmpl>
 )

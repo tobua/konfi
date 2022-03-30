@@ -80,7 +80,7 @@ interface TooltipProps {
   setOpen: (state: boolean) => void
 }
 
-const Tooltip = ({ value, onChange, referenceElement, open, setOpen }: TooltipProps) => {
+function Tooltip({ value, onChange, referenceElement, open, setOpen }: TooltipProps) {
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
   const [currentValue, setCurrentValue] = useState(value)
@@ -141,7 +141,7 @@ interface Props {
   onChange: (color: string) => void
 }
 
-export const Color = ({ value, onChange }: Props) => {
+export function Color({ value, onChange }: Props) {
   const { currentColorPicker, setCurrentColorPicker } = useContext(Context)
   const [referenceElement, setReferenceElement] = useState(null)
   const [open, setOpenState] = useState(false)

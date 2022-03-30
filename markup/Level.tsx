@@ -10,7 +10,7 @@ interface Props {
 }
 
 // Recursively render current object level.
-export const Level = ({ data, schema, indentation = 1 }: Props) => {
+export function Level({ data, schema, indentation = 1 }: Props) {
   const dataKeys = Object.keys(data)
 
   return (
